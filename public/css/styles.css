@@ -57,3 +57,7 @@ body{
 .smil-login-form-header{
     padding: 20px 20px 0px;
 }
+
+.smil-error-message{
+    color:red;
+}
