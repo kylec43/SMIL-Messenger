@@ -18,21 +18,29 @@ app.get('/', (req, res) => {
 
 
 app.get('/login', (req, res) => {
-    res.render(Pages.LOGIN_PAGE, {message: "This is a message", errorMessage: null});
+    res.render(Pages.LOGIN_PAGE, {message: "This is a message", errorMessage: null, successMessage: null});
 });
 
 
 app.post('/login', async (req, res) => {
-    await FirebaseAuthController.loginUser(req, res);
+    return await FirebaseAuthController.loginUser(req, res);
 });
 
 app.get('/forgot_password', (req, res) => {
     res.render(Pages.FORGOT_PASSWORD_PAGE, {message: "This is a message", errorMessage: null});
 });
 
+app.post('/forgot_password', async (req, res) => {
+    return await FirebaseAuthController.sendPasswordResetLink(req, res);
+});
+
 
 app.get('/register', (req, res) => {
     res.render(Pages.REGISTER_PAGE, {message: "This is a message", errorMessage: null});
+});
+
+app.post('/register', (req, res) => {
+    return FirebaseAuthController.registerUser(req, res);
 });
 
 

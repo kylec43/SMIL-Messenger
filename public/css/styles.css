@@ -18,7 +18,7 @@ body{
 
 
 /* SMIL classes */
-.smil-login-form{
+.smil-form{
     width:40%; 
     min-width: 300px; 
     max-width: 500px; 
@@ -28,11 +28,11 @@ body{
 }
 
 
-.smil-login-form-body{
+.smil-form-body{
     padding: 30px;
 }
 
-.smil-form-header{
+.smil-form-text-header{
     text-align: center;
     font-weight: bold;
 }
@@ -54,10 +54,16 @@ body{
     font-weight: bold;
 }
 
-.smil-login-form-header{
+.smil-form-header{
     padding: 20px 20px 0px;
 }
 
 .smil-error-message{
     color:red;
+    font-weight: bold;
+}
+
+.smil-success-message{
+    color:green;
+    font-weight: bold;
 }

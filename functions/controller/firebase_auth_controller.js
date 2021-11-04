@@ -34,9 +34,47 @@ async function loginUser(req, res){
     })
     .catch((e) => {
         console.log(`Error: ${e}`)
-        return res.render(Pages.LOGIN_PAGE, {error: true, errorMessage: e});
+        return res.render(Pages.LOGIN_PAGE, {errorMessage: e, successMessage: null});
     });
     
+}
+
+
+async function registerUser(req, res) 
+{
+    
+    const email = req.body.user_email;
+    const confirmEmail = req.body.user_confirm_email;
+    const password = req.body.user_password;
+    const confirmPassword = req.body.user_confirm_password;
+
+    let errorMessage = "";
+
+    try {
+        if(email !== confirmEmail){
+            error = true;
+            errorMessage += "Email and Confirmation Email do not match";
+        }
+        if(password !== confirmPassword){
+            errorMessage += errorMessage.length > 0 ? "<br>" : "";
+            errorMessage += "Password and Confirmation Password do not match"
+        } else if(password.length < 6){
+            errorMessage += errorMessage.length > 0 ? "<br>" : "";
+            errorMessage += "Password length is too short(6 characters min.)"
+        }
+
+        if(errorMessage.length > 0){
+            throw new Error(errorMessage);
+        } else {
+            await FirebaseAuth.createUserWithEmailAndPassword(FirebaseAuth.getAuth(), email, password);
+            console.log(getCurrentUser() ? "true" : "false");
+            return res.render(Pages.LOGIN_PAGE, {errorMessage: null, user: req.user, successMessage: "Registration Successful! Please Log In"});
+        }
+
+    } catch (e) {
+        return res.render(Pages.REGISTER_PAGE, {errorMessage, successMessage: null, user: req.user});
+    }
+
 }
 
 
@@ -57,9 +95,21 @@ async function generateToken(user){
     return token;
 }
 
+async function sendPasswordResetLink(req, res) 
+{
+    const email = req.body.user_email;
+    await FirebaseAuth.sendPasswordResetEmail(FirebaseAuth.getAuth(), email).then(()=>{
+        return res.render(Pages.LOGIN_PAGE, {errorMessage: null, successMessage: "Password Reset Link Sent!"});
+    }).catch(e => {
+        return res.render(Pages.FORGOT_PASSWORD_PAGE, {errorMessage: `${e}`});
+    });
+}
+
 
 module.exports = {
     loginUser,
     getCurrentUser,
     generateToken,
+    registerUser,
+    sendPasswordResetLink,
 }
