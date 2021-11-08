@@ -7,6 +7,7 @@
         <a href="/sent"class="list-group-item list-group-item-action <%= page === 'sent' ? 'active' : '' %>">Sent</a>
         <a href="/drafts"class="list-group-item list-group-item-action <%= page === 'drafts' ? 'active' : '' %>">Drafts</a>
         <a href="/logout"class="list-group-item list-group-item-action">Logout</a>
+        <p style="font-size:0.8rem; margin-top: 15px;">Signed in as: <%= user.email %></p>
       </div>
     </div>
   </nav>
