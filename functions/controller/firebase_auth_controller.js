@@ -34,7 +34,7 @@ async function loginUser(req, res){
     })
     .catch((e) => {
         console.log(`Error: ${e}`)
-        return res.render(Pages.LOGIN_PAGE, {errorMessage: e, successMessage: null});
+        return res.render(Pages.LOGIN_PAGE, {errorMessage: `${e}`, successMessage: null});
     });
     
 }
@@ -64,7 +64,7 @@ async function registerUser(req, res)
         }
 
         if(errorMessage.length > 0){
-            throw new Error(errorMessage);
+            return res.render(Pages.REGISTER_PAGE, {errorMessage, successMessage: null, user: req.user});
         } else {
             await FirebaseAuth.createUserWithEmailAndPassword(FirebaseAuth.getAuth(), email, password);
             console.log(getCurrentUser() ? "true" : "false");
@@ -72,7 +72,7 @@ async function registerUser(req, res)
         }
 
     } catch (e) {
-        return res.render(Pages.REGISTER_PAGE, {errorMessage, successMessage: null, user: req.user});
+        return res.render(Pages.REGISTER_PAGE, {errorMessage: `${e}`, successMessage: null, user: req.user});
     }
 
 }
