@@ -105,6 +105,17 @@ async function sendPasswordResetLink(req, res)
     });
 }
 
+async function logoutUser(req, res){
+
+    await FirebaseAuth.getAuth().signOut()
+    .then(() => {
+        return res.redirect('/login');
+    })
+    .catch((e) => {
+        return res.render(Pages.LOGIN_PAGE, {errorMessage: `${e}`, successMessage: null});
+    });
+}
+
 
 module.exports = {
     loginUser,
@@ -112,4 +123,5 @@ module.exports = {
     generateToken,
     registerUser,
     sendPasswordResetLink,
+    logoutUser,
 }

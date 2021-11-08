@@ -68,6 +68,10 @@ app.get('/mediaplayer', authAndRedirectLogin, (req, res) => {
     res.render(Pages.MEDIAPLAYER_PAGE, {message: "This is a message", errorMessage: null});
 });
 
+app.get('/logout', async (req, res) => {
+    return await FirebaseAuthController.logoutUser(req, res);
+})
+
 
 /* Middleware */
 

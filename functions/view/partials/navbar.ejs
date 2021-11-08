@@ -1,0 +1,11 @@
+ <nav id="sidebarMenu" class="d-lg-block sidebar bg-white">
+    <div class="position-sticky">
+      <div class="list-group list-group-flush mx-3 mt-4">
+        <a href="/compose"class="list-group-item list-group-item-action <%= page === 'compose' ? 'active' : '' %>">Compose</a>
+        <a href="/inbox" class="list-group-item list-group-item-action <%= page === 'inbox' ? 'active' : '' %>">Inbox</a>
+        <a href="/sent"class="list-group-item list-group-item-action <%= page === 'sent' ? 'active' : '' %>">Sent</a>
+        <a href="/drafts"class="list-group-item list-group-item-action <%= page === 'drafts' ? 'active' : '' %>">Drafts</a>
+        <a href="/logout"class="list-group-item list-group-item-action">Logout</a>
+      </div>
+    </div>
+  </nav>
