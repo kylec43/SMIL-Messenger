@@ -12,34 +12,34 @@ const functions = require("firebase-functions");
 exports.httpReq = functions.https.onRequest(app);
 
 
-app.get('/', (req, res) => {
+app.get('/', authAndRedirectInbox, (req, res) => {
     res.redirect('/login');
 });
 
 
-app.get('/login', (req, res) => {
+app.get('/login', authAndRedirectInbox, (req, res) => {
     res.render(Pages.LOGIN_PAGE, {message: "This is a message", errorMessage: null, successMessage: null});
 });
 
 
-app.post('/login', async (req, res) => {
+app.post('/login', authAndRedirectInbox, async (req, res) => {
     return await FirebaseAuthController.loginUser(req, res);
 });
 
-app.get('/forgot_password', (req, res) => {
+app.get('/forgot_password', authAndRedirectInbox, (req, res) => {
     res.render(Pages.FORGOT_PASSWORD_PAGE, {message: "This is a message", errorMessage: null});
 });
 
-app.post('/forgot_password', async (req, res) => {
+app.post('/forgot_password', authAndRedirectInbox, async (req, res) => {
     return await FirebaseAuthController.sendPasswordResetLink(req, res);
 });
 
 
-app.get('/register', (req, res) => {
+app.get('/register', authAndRedirectInbox, (req, res) => {
     res.render(Pages.REGISTER_PAGE, {message: "This is a message", errorMessage: null});
 });
 
-app.post('/register', (req, res) => {
+app.post('/register', authAndRedirectInbox, (req, res) => {
     return FirebaseAuthController.registerUser(req, res);
 });
 
@@ -84,6 +84,18 @@ async function authAndRedirectLogin(req, res, next){
         return next();
     } else {
         res.redirect('/login');
+    }
+}
+
+
+async function authAndRedirectInbox(req, res, next){
+        
+    req.user = FirebaseAuthController.getCurrentUser();
+    
+    if(req.user){
+        res.redirect('/inbox');
+    } else {
+        return next();
     }
 }
 
