@@ -45,27 +45,27 @@ app.post('/register', authAndRedirectInbox, (req, res) => {
 
 
 app.get('/compose', authAndRedirectLogin, (req, res) => {
-    res.render(Pages.COMPOSE_PAGE, {message: "This is a message", errorMessage: null});
+    res.render(Pages.COMPOSE_PAGE, {message: "This is a message", errorMessage: null, user: req.user});
 });
 
 
 app.get('/drafts', authAndRedirectLogin, (req, res) => {
-    res.render(Pages.DRAFTS_PAGE, {message: "This is a message", errorMessage: null});
+    res.render(Pages.DRAFTS_PAGE, {message: "This is a message", errorMessage: null, user: req.user});
 });
 
 
 app.get('/inbox', authAndRedirectLogin, (req, res) => {
-    res.render(Pages.INBOX_PAGE, {message: "This is a message", errorMessage: null});
+    res.render(Pages.INBOX_PAGE, {message: "This is a message", errorMessage: null, user: req.user});
 });
 
 
 app.get('/sent', authAndRedirectLogin, (req, res) => {
-    res.render(Pages.SENT_PAGE, {message: "This is a message", errorMessage: null});
+    res.render(Pages.SENT_PAGE, {message: "This is a message", errorMessage: null, user: req.user});
 });
 
 
 app.get('/mediaplayer', authAndRedirectLogin, (req, res) => {
-    res.render(Pages.MEDIAPLAYER_PAGE, {message: "This is a message", errorMessage: null});
+    res.render(Pages.MEDIAPLAYER_PAGE, {message: "This is a message", errorMessage: null, user: req.user});
 });
 
 app.get('/logout', async (req, res) => {
