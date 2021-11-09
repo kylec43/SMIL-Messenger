@@ -33,7 +33,7 @@ class Message{
         /* Construct Smil message based off of textMessage and textDuration */
         let smilMessage = `
             <par>
-                <text val="${message}" dur="${duration}">
+                <text val="${this.textMessage}" dur="${this.textDuration}">
             </par>
         `        
         this.smilMessage = smilMessage;
@@ -57,7 +57,8 @@ class Message{
         deserializedMessage.setTimeStamp(message[Args.TIME_STAMP]);
         deserializedMessage.setComposer(message[Args.COMPOSER]);
         deserializedMessage.setRecepient(message[Args.RECEPIENT]);
-        deserializedMessage.setSmilMessage(message[Args.SMIL_MESSAGE]);
+        deserializedMessage.setTextMessage(message[Args.TEXT_MESSAGE], message[Args.TEXT_DURATION]);
+        deserializedMessage.constructSmilMessage();
         return deserializedMessage;
     }
 }
