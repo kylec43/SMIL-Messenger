@@ -1,27 +1,6 @@
 var Pages = require('../model/constants.js').pages; 
 const FirebaseAuth = require("firebase/auth");
-
-//initialize firebase admin
 var FirebaseAdmin = require('firebase-admin');
-var serviceAccount = require("../smil-messenger-firebase-adminsdk-2qumu-2c8573a700.json");
-FirebaseAdmin.initializeApp({
-  credential: FirebaseAdmin.credential.cert(serviceAccount)
-});
-
-//initialize firebase app
-const initializeApp = require("firebase/app").initializeApp;
-
-const firebaseConfig = {
-    apiKey: "AIzaSyC1VKYnY0Dd6dyqFWb1MpFqPSLaB4vR_os",
-    authDomain: "smil-messenger.firebaseapp.com",
-    projectId: "smil-messenger",
-    storageBucket: "smil-messenger.appspot.com",
-    messagingSenderId: "22154390182",
-    appId: "1:22154390182:web:aacf18ff9407c7b93d2267",
-    measurementId: "G-ZHDXYYLFYC"  
-};
-
-const app = initializeApp(firebaseConfig);
 
 
 async function loginUser(req, res){

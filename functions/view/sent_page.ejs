@@ -11,6 +11,19 @@
         
         <%- include('partials/navbar.ejs', {page: 'sent', user}) %>
 
+
+        <div class="sidebar-outside-container">
+            <div class="container-fluid">
+                <% for(let i = 0; i < sentMessages.length; i++) { %>
+                    <p><%= sentMessages[i].timeStamp %></p>
+                    <p><%= sentMessages[i].composer %></p>
+                    <p><%= sentMessages[i].recepient %></p>
+                    <p><%= sentMessages[i].smilMessage %></p>
+                    <hr>
+                <% } %>
+            </div>
+        </div>
+
         <!--Scripts-->
         <%- include('partials/scripts.ejs') %>
     </body>

@@ -9,7 +9,23 @@ pages = {
     MEDIAPLAYER_PAGE: "mediaplayer_page.ejs",
 }
 
+firebase_folders = {
+    MESSAGE_FOLDER: "messages",
+}
+
+
+firebase_args = {
+    TIME_STAMP: "time_stamp",
+    RECEPIENT: "recepient",
+    COMPOSER: "composer",
+    DURATION: "duration",
+    MESSAGE: "message",
+    SMIL_MESSAGE: "smil_message",
+}
+
 
 module.exports = {
     pages,
+    firebase_args,
+    firebase_folders,
 }
