@@ -1,28 +1,28 @@
-const Pages = require('./model/constants.js').pages;
-const FirebaseAuthController = require('./controller/firebase_auth_controller.js');
-const MessageManager = require('./controller/message_manager.js');
-
 //initialize firebase admin
 var FirebaseAdmin = require('firebase-admin');
 var serviceAccount = require("./smil-messenger-firebase-adminsdk-2qumu-2c8573a700.json");
 FirebaseAdmin.initializeApp({
-  credential: FirebaseAdmin.credential.cert(serviceAccount)
+  credential: FirebaseAdmin.credential.cert(serviceAccount),
+  storageBucket: "smil-messenger.appspot.com",
 });
 
-//initialize firebase app
-const initializeApp = require("firebase/app").initializeApp;
+
+// Import the functions you need from the SDKs you need
+const firebase = require('firebase/app');
 
 const firebaseConfig = {
-    apiKey: "AIzaSyC1VKYnY0Dd6dyqFWb1MpFqPSLaB4vR_os",
-    authDomain: "smil-messenger.firebaseapp.com",
-    projectId: "smil-messenger",
-    storageBucket: "smil-messenger.appspot.com",
-    messagingSenderId: "22154390182",
-    appId: "1:22154390182:web:aacf18ff9407c7b93d2267",
-    measurementId: "G-ZHDXYYLFYC"  
+  apiKey: "AIzaSyC1VKYnY0Dd6dyqFWb1MpFqPSLaB4vR_os",
+  authDomain: "smil-messenger.firebaseapp.com",
+  projectId: "smil-messenger",
+  storageBucket: "smil-messenger.appspot.com",
+  messagingSenderId: "22154390182",
+  appId: "1:22154390182:web:aacf18ff9407c7b93d2267",
+  measurementId: "G-ZHDXYYLFYC"
 };
 
-initializeApp(firebaseConfig);
+// Initialize Firebase
+const fbApp = firebase.initializeApp(firebaseConfig);
+
 
 
 //Set up express with ejs
@@ -35,6 +35,12 @@ app.set('views', './view');
 const functions = require("firebase-functions");
 exports.httpReq = functions.https.onRequest(app);
 
+
+
+/* Import modules */
+const Pages = require('./model/constants.js').pages;
+const FirebaseAuthController = require('./controller/firebase_auth_controller.js');
+const MessageManager = require('./controller/message_manager.js');
 
 app.get('/', authAndRedirectInbox, (req, res) => {
     res.redirect('/login');
@@ -64,7 +70,7 @@ app.get('/register', authAndRedirectInbox, (req, res) => {
 });
 
 app.post('/register', authAndRedirectInbox, (req, res) => {
-    return FirebaseAuthController.registerUser(req, res);
+   return FirebaseAuthController.registerUser(req, res);
 });
 
 

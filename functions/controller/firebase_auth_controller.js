@@ -2,7 +2,6 @@ var Pages = require('../model/constants.js').pages;
 const FirebaseAuth = require("firebase/auth");
 var FirebaseAdmin = require('firebase-admin');
 
-
 async function loginUser(req, res){
     let email = req.body.user_email;
     let password = req.body.user_password;

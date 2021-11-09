@@ -1,4 +1,4 @@
-var FirebaseFirestore = require('firebase/firestore');
+var FirebaseFirestore = require('firebase/firestore/lite');
 var Message = require('../model/message.js');
 var Folders = require('../model/constants.js').firebase_folders;
 var Args = require('../model/constants.js').firebase_args;
