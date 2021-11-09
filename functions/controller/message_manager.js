@@ -11,24 +11,19 @@ async function uploadMessage(req, res){
 
         /* Get user input */
         const recepient = req.body.recepient;
-        const message = req.body.message;
+        const textMessage = req.body.message;
         const duration = req.body.duration;
         const timeStamp = FirebaseFirestore.Timestamp.fromDate(new Date());
 
-        /* Create smil message from message and duration */
-        let smilMessage = `
-            <par>
-                <text val="${message}" dur="${duration}">
-            </par>
-        `
-
         console.log("0")
+        
         /* Construct Message object */
         const newMessage = new Message();
         newMessage.setComposer(req.user.email);
         newMessage.setRecepient(recepient);
         newMessage.setTimeStamp(timeStamp);
-        newMessage.setSmilMessage(smilMessage);
+        newMessage.setTextMessage(textMessage, duration);
+        newMessage.constructSmilMessage();
 
 
         /* upload newMessage to doc location*/

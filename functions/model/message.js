@@ -7,6 +7,8 @@ class Message{
         this.composer = "";
         this.recepient = "";
         this.timeStamp = "";
+        this.textMessage = "";
+        this.textDuration = "";
     }
 
 
@@ -22,7 +24,18 @@ class Message{
         this.recepient = recepient;
     }
 
-    setSmilMessage(smilMessage){
+    setTextMessage(textMessage, textDuration){
+        this.textMessage = textMessage;
+        this.textDuration = textDuration;
+    }
+
+    constructSmilMessage(){
+        /* Construct Smil message based off of textMessage and textDuration */
+        let smilMessage = `
+            <par>
+                <text val="${message}" dur="${duration}">
+            </par>
+        `        
         this.smilMessage = smilMessage;
     }
 
@@ -32,6 +45,8 @@ class Message{
             "time_stamp": this.timeStamp,
             "composer": this.composer,
             "recepient": this.recepient,
+            "text_message": this.textMessage,
+            "text_duration": this.textDuration,
             "smil_message": this.smilMessage
         }
     }
