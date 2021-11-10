@@ -21,6 +21,7 @@ firebase_args = {
     TEXT_DURATION: "text_duration",
     TEXT_MESSAGE: "text_message",
     SMIL_MESSAGE: "smil_message",
+    SUBJECT: 'subject',
 }
 
 

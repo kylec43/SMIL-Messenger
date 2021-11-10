@@ -11,6 +11,7 @@ async function uploadMessage(req, res){
 
         /* Get user input */
         const recepient = req.body.recepient;
+        const subject = req.body.subject;
         const textMessage = req.body.message;
         const duration = req.body.duration;
         const timeStamp = FirebaseFirestore.Timestamp.fromDate(new Date());
@@ -23,6 +24,7 @@ async function uploadMessage(req, res){
         newMessage.setRecepient(recepient);
         newMessage.setTimeStamp(timeStamp);
         newMessage.setTextMessage(textMessage, duration);
+        newMessage.setSubject(subject);
         newMessage.constructSmilMessage();
 
 
