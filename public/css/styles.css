@@ -36,9 +36,59 @@ body{
     padding: 30px;
 }
 
+
+
+.smil-message-list-row, .smil-message-list-row-header{
+    padding: 8px 20px;
+    white-space: nowrap;
+    color:black;
+}
+
+.smil-message-list-row:hover{
+    background-color: rgb(248, 212, 182)
+}
+
+.smil-to-from-header, .smil-subject-header, .smil-timestamp-header{
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.smil-to-from-header{
+    width: 180px;
+}
+
+.smil-subject-header{
+    width: 400px;
+}
+
+.smil-timestamp-header{
+    width: 300px;
+}
+
+.smil-subject-col, .smil-to-from-col, .smil-seperator-col{
+    overflow: hidden;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.smil-to-from-col{
+    width: 180px;
+}
+
+.smil-seperator-col{
+    width: 20px;
+}
+
+.smil-subject-col{
+    width: 400px;
+}
+
+.smil-timestamp-col{
+    width: 300px;
+}
+
 .smil-form-text-header{
     text-align: center;
-    font-weight: bold;
 }
 
 

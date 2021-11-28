@@ -57,6 +57,12 @@ class Message{
         }
     }
 
+    getTimestampString(){
+        let date = new Date(this.timeStamp.seconds*1000);
+        date.setHours(date.getHours() - 6);
+        return date.toDateString() + " " + date.toLocaleTimeString('en-US');
+    }
+
 
     static deserialize(message){
         var deserializedMessage = new Message();
@@ -66,6 +72,7 @@ class Message{
         deserializedMessage.setTextMessage(message[Args.TEXT_MESSAGE], message[Args.TEXT_DURATION]);
         deserializedMessage.setSubject(message[Args.SUBJECT]);
         deserializedMessage.constructSmilMessage();
+        deserializedMessage.timeStampString = deserializedMessage.getTimestampString();
         return deserializedMessage;
     }
 }
