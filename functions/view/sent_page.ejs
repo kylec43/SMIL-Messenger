@@ -15,40 +15,41 @@
         <div class="sidebar-outside-container">
             <div>
                 <div class="smil-message-list-row-header"  style="margin: 30px 0px 0px;">
-                    <div class="smil-to-from-header" style="font-weight: bold; display: inline-block;">
+                    <div class="col-sm-3 overflow-hidden inline-block">
                         <p style="margin-bottom: 0px;">Recepient</p>
                     </div>
-                    <div class="smil-seperator-col" style="display: inline-block; margin: 0px 15px;">
+                    <div class="col-sm-1 overflow-hidden inline-block smil-seperator">
                     </div>
-                    <div class="smil-subject-header" style="display: inline-block;">
+                    <div class="col-sm-5 overflow-hidden inline-block">
                         <p style="margin-bottom: 0px;">Subject</p>
                     </div>
-                    <div class="smil-seperator-col" style="display: inline-block; margin: 0px 15px;">
+                    <div class="col-sm-1 overflow-hidden inline-block smil-seperator">
                     </div>
-                    <div class="smil-timestamp-header" style="display: inline-block;">
+                    <div class="col-sm-2 overflow-hidden inline-block" style="display: inline-block;">
                         <p style="margin-bottom: 0px;">Timestamp</p>
                     </div>
                 </div>
                 <hr style="margin: 0px;">
                 <% for(let i = 0; i < sentMessages.length; i++) { %>
-                    <a href="#" style="text-decoration: none;">
-                        <div class="smil-message-list-row">
-                            <div class="smil-to-from-col" style="font-weight: bold; display: inline-block;">
-                                <p style="margin-bottom: 0px;"><%= sentMessages[i].recepient %></p>
+                    <div class="smil-list-row-container">
+                        <a class="smil-list-button" href="#" style="text-decoration: none;">
+                            <div class="smil-message-list-row">
+                                <div class="col-sm-3 smil-list-col overflow-hidden inline-block">
+                                    <p style="margin-bottom: 0px;"><%= sentMessages[i].recepient %></p>
+                                </div>
+                                <div class="col-sm-1 overflow-hidden smil-seperator inline-block">
+                                    <p style="margin-bottom: 0px;">-</p>
+                                </div>
+                                <div class="col-sm-5 smil-list-col overflow-hidden inline-block">
+                                    <p style="margin-bottom: 0px;"><%= sentMessages[i].subject %></p>
+                                </div>
+                                <div class="col-sm-1 overflow-hidden smil-seperator inline-block"></div>
+                                <div class="col-sm-2 smil-list-col inline-block">
+                                    <p style="margin-bottom: 0px;"><%=  sentMessages[i].timeStampString  %></p>
+                                </div>
                             </div>
-                            <div class="smil-seperator-col" style="display: inline-block; margin: 0px 15px;">
-                                <p style="margin-bottom: 0px;">-</p>
-                            </div>
-                            <div class="smil-subject-col" style="display: inline-block;">
-                                <p style="margin-bottom: 0px;"><%= sentMessages[i].subject %></p>
-                            </div>
-                            <div class="smil-seperator-col" style="display: inline-block; margin: 0px 15px;">
-                            </div>
-                            <div class="smil-timestamp-col" style="display: inline-block;">
-                                <p style="margin-bottom: 0px;"><%=  sentMessages[i].timeStampString  %></p>
-                            </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                     <hr style="margin: 0px;">
                 <% } %>
             </div>

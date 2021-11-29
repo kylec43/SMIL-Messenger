@@ -20,6 +20,14 @@ body{
     text-align: center;
 }
 
+.overflow-hidden{
+    overflow: hidden;
+    vertical-align: bottom;
+}
+
+.inline-block{
+    display: inline-block;
+}
 
 /* SMIL classes */
 .smil-form{
@@ -36,15 +44,32 @@ body{
     padding: 30px;
 }
 
+.smil-seperator{
+    margin: 0px 15px;
+}
+
 
 
 .smil-message-list-row, .smil-message-list-row-header{
     padding: 8px 20px;
     white-space: nowrap;
     color:black;
+    width: 100%;
+    max-width: 900px;
 }
 
-.smil-message-list-row:hover{
+.smil-list-col{
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: darkslategray;
+}
+
+.smil-message-list-row-header{
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.smil-list-row-container:hover{
     background-color: rgb(248, 212, 182)
 }
 
