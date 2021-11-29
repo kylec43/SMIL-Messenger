@@ -40,7 +40,7 @@ class Message{
             <par>
                 <text val="${this.textMessage}" dur="${this.textDuration}">
             </par>
-        `        
+        `
         this.smilMessage = smilMessage;
     }
 
