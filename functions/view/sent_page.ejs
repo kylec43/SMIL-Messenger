@@ -8,7 +8,11 @@
         <%- include('partials/css.ejs') %>
     </head>
     <body>
-        
+
+        <div class="smil-media-player-background-shade" style="display: none" id="smil_media_player_background_shade"></div>
+        <div class="smil-media-player-container" id="smil_media_player_container">
+        </div>
+
         <%- include('partials/navbar.ejs', {page: 'sent', user}) %>
 
 
@@ -32,7 +36,7 @@
                 <hr style="margin: 0px;">
                 <% for(let i = 0; i < sentMessages.length; i++) { %>
                     <div class="smil-list-row-container">
-                        <a class="smil-list-button" href="#" style="text-decoration: none;">
+                        <a class="smil-list-button" href="#" style="text-decoration: none;" onclick="openVideo(<%= i %>)">
                             <div class="smil-message-list-row">
                                 <div class="col-sm-3 smil-list-col overflow-hidden inline-block">
                                     <p style="margin-bottom: 0px;"><%= sentMessages[i].recepient %></p>
@@ -57,5 +61,35 @@
 
         <!--Scripts-->
         <%- include('partials/scripts.ejs') %>
+
+
+        <script>
+            var sentMessages = <%- JSON.stringify(sentMessages) %>;
+            var smilMediaPlayerContainer = document.getElementById('smil_media_player_container');
+            var mediaPlayer = GetSmilPlayer(smilMediaPlayerContainer);
+            mediaPlayer.onClose(()=>{
+                document.getElementById('smil_media_player_background_shade').style.display = "none";
+            });
+
+            function openVideo(messageIndex){
+                console.log(messageIndex);
+                let message = sentMessages[messageIndex].smilMessage;
+                let subject = sentMessages[messageIndex].subject;
+                let to = sentMessages[messageIndex].recepient;
+
+                let videoTitle = 
+                `
+                To: ${to}<br>
+                Subject: ${subject}
+                `;                
+                
+                console.log(`Message is ${message}`);
+                let opened = mediaPlayer.open(message, videoTitle); 
+                if(opened){ 
+                    document.getElementById('smil_media_player_background_shade').style.display="block";  
+                }    
+            }
+
+        </script>
     </body>
 </html>

@@ -94,6 +94,36 @@ async function getInboxMessages(user){
 }
 
 
+
+async function getDrafts(user){
+
+    try{
+    console.log("1");
+    console.log(Args.RECEPIENT);
+    const q = FirebaseFirestore.query(
+        FirebaseFirestore.collection(FirebaseFirestore.getFirestore(), "messages"), 
+        FirebaseFirestore.where(Args.COMPOSER, "==", user.email), 
+        FirebaseFirestore.orderBy("time_stamp", "desc")
+        );
+
+    console.log("2");
+    querySnapshot = await FirebaseFirestore.getDocs(q);
+
+
+    console.log("3");
+    var messages = [];
+    querySnapshot.forEach((doc) => {
+        let message = Message.deserialize(doc.data());
+        messages.push(message);
+      });
+    } catch(e){
+        console.log(e);
+    }
+
+    return messages;
+}
+
+
 module.exports = {
     uploadMessage,
     getSentMessages,

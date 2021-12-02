@@ -37,9 +37,15 @@ class Message{
     constructSmilMessage(){
         /* Construct Smil message based off of textMessage and textDuration */
         let smilMessage = `
-            <par>
-                <text val="${this.textMessage}" dur="${this.textDuration}">
-            </par>
+            <smil>
+                <head>
+                </head>
+                <body>
+                    <par>
+                        <smilText dur="${this.textDuration}s">${this.textMessage}</smilText>
+                    </par>
+                </body>
+            </smil>
         `
         this.smilMessage = smilMessage;
     }
