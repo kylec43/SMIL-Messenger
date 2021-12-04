@@ -7,11 +7,10 @@ class Message{
         this.composer = "";
         this.recepient = "";
         this.timeStamp = "";
-        this.textMessage = "";
-        this.textDuration = "";
         this.subject = "";
+        this.state = "";
+        this.elements = "";
     }
-
 
     setSubject(subject){
         this.subject = subject;
@@ -29,46 +28,49 @@ class Message{
         this.recepient = recepient;
     }
 
-    setTextMessage(textMessage, textDuration){
-        this.textMessage = textMessage;
-        this.textDuration = textDuration;
+    setElements(elements){
+        this.elements = elements;
     }
 
-    constructSmilMessage(){
-        /* Construct Smil message based off of textMessage and textDuration */
-        let smilMessage = `
-            <par>
-                <text val="${this.textMessage}" dur="${this.textDuration}">
-            </par>
+    setState(state){
+        this.state = state;
+    }
+
+    constructSmilMessage(elements){
+        let smilMessage = `<seq>\n`
+
+        for (var i=0; i<elements.length; i++){
+            smilMessage += `
+                    <text val="${elements[i]['txt']}" begin="${elements[i]['begin']}"   dur="${elements[i]['dur']}">
         `        
+        }
+        smilMessage += `</seq>\n`
         this.smilMessage = smilMessage;
     }
 
     serialize(){
-
         return {
             "time_stamp": this.timeStamp,
             "composer": this.composer,
             "recepient": this.recepient,
-            "text_message": this.textMessage,
-            "text_duration": this.textDuration,
+            "elements": this.elements,
             "smil_message": this.smilMessage,
             "subject": this.subject,
+            "state": this.state,
         }
     }
-
 
     static deserialize(message){
         var deserializedMessage = new Message();
         deserializedMessage.setTimeStamp(message[Args.TIME_STAMP]);
         deserializedMessage.setComposer(message[Args.COMPOSER]);
         deserializedMessage.setRecepient(message[Args.RECEPIENT]);
-        deserializedMessage.setTextMessage(message[Args.TEXT_MESSAGE], message[Args.TEXT_DURATION]);
+        deserializedMessage.setElements(message[Args.TEXT_MESSAGE]);
         deserializedMessage.setSubject(message[Args.SUBJECT]);
+        deserializedMessage.setState(message[Args.STATE]);
         deserializedMessage.constructSmilMessage();
         return deserializedMessage;
     }
 }
-
 
 module.exports = Message;

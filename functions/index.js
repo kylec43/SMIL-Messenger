@@ -24,17 +24,16 @@ const firebaseConfig = {
 const fbApp = firebase.initializeApp(firebaseConfig);
 
 
-
 //Set up express with ejs
 const express = require('express');
 const app = express();
 app.set('view engine', 'ejs');
 app.set('views', './view');
 
+
 //Let express handle requests
 const functions = require("firebase-functions");
 exports.httpReq = functions.https.onRequest(app);
-
 
 
 /* Import modules */
@@ -73,14 +72,37 @@ app.post('/register', authAndRedirectInbox, (req, res) => {
    return FirebaseAuthController.registerUser(req, res);
 });
 
+// cb-working =======================================================================
+
+// app.use(express.json());    // <==== parse request body as JSON
+// app.use(express.urlencoded({
+//   extended: true
+// }));
 
 app.get('/compose', authAndRedirectLogin, (req, res) => {
     res.render(Pages.COMPOSE_PAGE, {errorMessage: null, user: req.user});
 });
 
-app.post('/compose', authAndRedirectLogin, async (req, res) => {
-    return await MessageManager.uploadMessage(req, res);
+app.post('/compose-send', authAndRedirectLogin, async (req, res) => {
+    return await MessageManager.uploadMessage(req, res, "sent");
 });
+
+app.post('/compose-draft', authAndRedirectLogin, async (req, res) => {
+    console.log("===============");
+    for (var i=0; i<req.body.elem.length; i++){
+        console.log(req.body.elem[i]['begin']);
+        console.log(req.body.elem[i]['dur']);
+        console.log(req.body.elem[i]['txt']);
+    }
+    console.log("===============");
+
+    return res.render(Pages.COMPOSE_PAGE, {errorMessage: null, user: req.user});
+
+    // return await MessageManager.uploadMessage(req, res, "draft");
+});
+
+
+// end-working ===================================================================
 
 
 app.get('/drafts', authAndRedirectLogin, (req, res) => {
@@ -111,8 +133,14 @@ app.get('/logout', async (req, res) => {
 
 /* Middleware */
 
+// cb-test
+const FirebaseAuth = require("firebase/auth");
+
 async function authAndRedirectLogin(req, res, next){
-        
+    
+    // cb-test
+    await FirebaseAuth.signInWithEmailAndPassword(FirebaseAuth.getAuth(), "cbeardain@uco.edu", "chad9999");
+
     req.user = FirebaseAuthController.getCurrentUser();
     
     if(req.user){
@@ -125,7 +153,10 @@ async function authAndRedirectLogin(req, res, next){
 
 
 async function authAndRedirectInbox(req, res, next){
-        
+
+    // cb-test
+    await FirebaseAuth.signInWithEmailAndPassword(FirebaseAuth.getAuth(), "cbeardain@uco.edu", "chad9999");
+
     req.user = FirebaseAuthController.getCurrentUser();
     
     if(req.user){
@@ -134,4 +165,3 @@ async function authAndRedirectInbox(req, res, next){
         return next();
     }
 }
-

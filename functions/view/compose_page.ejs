@@ -4,45 +4,124 @@
         <meta charset="utf-8">
         <title>SMIL Messenger</title>
 
-        <!-- CSS -->
+        <!-- CSS and favicon -->
         <%- include('partials/css.ejs') %>
+        <%- include('partials/favicon.ejs') %>
     </head>
-    <body>
-        
+    <body onload="buildTable();">
+    <!-- <body> -->
+
         <%- include('partials/navbar.ejs', {page: 'compose', user}) %>
 
+         <div class="sidebar-outside-container">
+            <form method="post">
+                <div class="smil-compose-form">
+                    <div class="form-group">
+                        <label for="recepient">Recepient:</label>
+                        <div class="input-group">
+                            <!-- cb-test: value -->
+                            <input class="form-control" name="recepient" id="recepient" type="email" value="bob@test.com" required/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="recepient">Subject:</label>
+                        <div class="input-group">
+                            <!-- cb-test: value -->
+                            <input class="form-control" name="subject" id="subject" minlength="1" maxlength="100" value="test msg" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="smil-compose-form">
+                    <div id="smil-table">
+                        <table class="table-striped">
+                        <!-- <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Start</th>
+                                    <th>Duration</th>
+                                    <th>Message</th>
+                                    <th></th>
+                                </tr>
+                            </thead> -->
+                            <thead>
+                                <div id="smil-header-row">
+                                </div>
+                            </thead>
+                            <div id="smil-element-rows">
+                                <!-- <div class="form-inline"> -->
+                                <!-- <div class="form-group col-sm-10"> -->
+                                <!-- <div class="form-group input-group">    -->
 
-        <div class="sidebar-outside-container">
-            <form class="smil-compose-form" action="/compose" method="post">
-                <div class="form-group">
-                    <label for="recepient">Recepient:</label>
-                    <div class="input-group">
-                        <input class="form-control" name="recepient" id="recepient" type="email" required>
+                            </div>
+                        </table>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="recepient">Subject:</label>
-                    <div class="input-group">
-                        <input class="form-control" name="subject" id="subject" minlength="1" maxlength="100" required>
-                    </div>
+                <div class="form-inline">
+                    <button type="submit" class="btn btn-primary margin-center" formaction="/compose-draft">Save Draft</button>
+                    <button type="submit" class="btn btn-primary margin-center" formaction="/compose-send">Send</button>
                 </div>
-                <div class="form-group">
-                    <label for="message">Message:</label>
-                    <div class="input-group">
-                        <textarea class="form-control" name="message" id="message" rows="5" minlength="1" maxlength="200" required></textarea>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="duration">Duration:</label>
-                    <div class="input-group">
-                        <input class="form-control" name="duration" id="duration" type="number" min="1" max="30" required>
-                    </div>
-                </div>
-                <button class="btn btn-primary margin-center">Send</button>
             </form>
         </div>
 
         <!--Scripts-->
         <%- include('partials/scripts.ejs') %>
+
+        <script type="text/javascript">
+            
+            var row_count = 0;
+
+            console.log("row_count:" + row_count)
+
+            function buildTable() {
+                addRow();
+                addHeader();
+            }
+            
+            function addHeader() {
+              document.querySelector('#smil-header-row').insertAdjacentHTML(
+                'afterEnd',
+                `<tr>
+                    <th></th>
+                    <th>Start</th>
+                    <th>Duration</th>
+                    <th>Message</th>
+                    <th></th>
+                </tr>` 
+                )
+            }
+
+
+            function addRow() {
+              document.querySelector('#smil-element-rows').insertAdjacentHTML(
+                'beforeend',
+                `<div id="input-group#${row_count}" class="input-group">
+                    <tr>
+                        <td><input type="button" value="+" onclick="addRow()"></td>
+                        <td><input class="form-control" name="elem[${row_count}][begin]" type="number" min="0" required/></td>
+                        <td><input class="form-control" name="elem[${row_count}][dur]" type="number" min="1" max="30" required/></td>
+                        <td><textarea class="form-control" name="elem[${row_count}][txt]" rows="1" minlength="1" maxlength="30" required/></textarea></td>
+                        <td><input type="button" value="X" onclick="removeRow(this)"></td>
+                    </tr>
+                </div>`
+              )
+              row_count++;
+              console.log("row_count:" + row_count)
+            }
+
+            function removeRow (input) {
+              var group_id = input.parentNode.id
+              var start_pos = group_id.indexOf("#")
+              var group_id_len = group_id.length
+              var group_id_num = group_id.substring(start_pos+1, group_id_len)
+
+              console.log("row_count:" + row_count)
+              if (row_count > 1)
+              {
+                input.parentNode.remove()
+                row_count--;
+                console.log("row_count:" + row_count)
+              }
+            }
+        </script>
     </body>
 </html>

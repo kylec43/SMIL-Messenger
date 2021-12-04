@@ -5,28 +5,26 @@ var Args = require('../model/constants.js').firebase_args;
 var Pages = require('../model/constants.js').pages;
 var FirebaseAdmin = require('firebase-admin');
 
-async function uploadMessage(req, res){
+
+async function uploadMessage(req, res, state_arg){
 
     try{
-
         /* Get user input */
         const recepient = req.body.recepient;
         const subject = req.body.subject;
-        const textMessage = req.body.message;
-        const duration = req.body.duration;
         const timeStamp = FirebaseFirestore.Timestamp.fromDate(new Date());
+        const state = state_arg;
+        const elements = req.body.elem
 
-        console.log("0")
-        
         /* Construct Message object */
         const newMessage = new Message();
         newMessage.setComposer(req.user.email);
         newMessage.setRecepient(recepient);
         newMessage.setTimeStamp(timeStamp);
-        newMessage.setTextMessage(textMessage, duration);
+        newMessage.setElements(elements);
         newMessage.setSubject(subject);
-        newMessage.constructSmilMessage();
-
+        newMessage.setState(state);
+        newMessage.constructSmilMessage(elements);
 
         /* upload newMessage to doc location*/
         await FirebaseFirestore.addDoc(FirebaseFirestore.collection(FirebaseFirestore.getFirestore(), Folders.MESSAGE_FOLDER), newMessage.serialize());
@@ -38,22 +36,16 @@ async function uploadMessage(req, res){
     }
 }
 
-
-
 async function getSentMessages(user){
 
-    console.log("1")
     const q = FirebaseFirestore.query(
         FirebaseFirestore.collection(FirebaseFirestore.getFirestore(), "messages"), 
         FirebaseFirestore.where(Args.COMPOSER, "==", user.email), 
         FirebaseFirestore.orderBy("time_stamp", "desc")
         );
 
-    console.log("2")
     querySnapshot = await FirebaseFirestore.getDocs(q);
 
-
-    console.log("3")
     var messages = [];
     querySnapshot.forEach((doc) => {
         let message = Message.deserialize(doc.data());

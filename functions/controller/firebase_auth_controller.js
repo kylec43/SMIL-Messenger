@@ -3,6 +3,7 @@ const FirebaseAuth = require("firebase/auth");
 var FirebaseAdmin = require('firebase-admin');
 
 async function loginUser(req, res){
+
     let email = req.body.user_email;
     let password = req.body.user_password;
 
@@ -16,6 +17,23 @@ async function loginUser(req, res){
     });
     
 }
+
+// //cb-test
+// async function loginUser(req, res){
+
+//     let email = "cbeardain@uco.edu";
+//     let password = "chad9999";
+
+//     await FirebaseAuth.signInWithEmailAndPassword(FirebaseAuth.getAuth(), email, password)
+//     .then((userCredential) => {
+//         return res.redirect('/inbox');
+//     })
+//     .catch((e) => {
+//         console.log(`Error: ${e}`)
+//         return res.render(Pages.LOGIN_PAGE, {errorMessage: `${e}`, successMessage: null});
+//     });
+    
+// }
 
 
 async function registerUser(req, res) 
