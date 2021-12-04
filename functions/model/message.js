@@ -10,6 +10,7 @@ class Message{
         this.textMessage = "";
         this.textDuration = "";
         this.subject = "";
+        this.state = "sent";
     }
 
 
@@ -32,6 +33,10 @@ class Message{
     setTextMessage(textMessage, textDuration){
         this.textMessage = textMessage;
         this.textDuration = textDuration;
+    }
+
+    setState(state){
+        this.state = state;
     }
 
     constructSmilMessage(){
@@ -60,6 +65,7 @@ class Message{
             "text_duration": this.textDuration,
             "smil_message": this.smilMessage,
             "subject": this.subject,
+            "state": this.state,
         }
     }
 
@@ -77,6 +83,7 @@ class Message{
         deserializedMessage.setRecepient(message[Args.RECEPIENT]);
         deserializedMessage.setTextMessage(message[Args.TEXT_MESSAGE], message[Args.TEXT_DURATION]);
         deserializedMessage.setSubject(message[Args.SUBJECT]);
+        deserializedMessage.setState(message['state']);
         deserializedMessage.constructSmilMessage();
         deserializedMessage.timeStampString = deserializedMessage.getTimestampString();
         return deserializedMessage;

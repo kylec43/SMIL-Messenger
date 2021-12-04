@@ -79,12 +79,13 @@ app.get('/compose', authAndRedirectLogin, (req, res) => {
 });
 
 app.post('/compose', authAndRedirectLogin, async (req, res) => {
-    return await MessageManager.uploadMessage(req, res);
+    return await MessageManager.uploadMessage(req, res, "draft");
 });
 
 
-app.get('/drafts', authAndRedirectLogin, (req, res) => {
-    res.render(Pages.DRAFTS_PAGE, {errorMessage: null, user: req.user});
+app.get('/drafts', authAndRedirectLogin, async (req, res) => {
+    let drafts = await MessageManager.getDrafts(req.user);
+    res.render(Pages.DRAFTS_PAGE, {errorMessage: null, user: req.user, drafts});
 });
 
 

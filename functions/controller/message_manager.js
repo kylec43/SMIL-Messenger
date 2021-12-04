@@ -5,7 +5,7 @@ var Args = require('../model/constants.js').firebase_args;
 var Pages = require('../model/constants.js').pages;
 var FirebaseAdmin = require('firebase-admin');
 
-async function uploadMessage(req, res){
+async function uploadMessage(req, res, state){
 
     try{
 
@@ -25,6 +25,7 @@ async function uploadMessage(req, res){
         newMessage.setTimeStamp(timeStamp);
         newMessage.setTextMessage(textMessage, duration);
         newMessage.setSubject(subject);
+        newMessage.setState(state);
         newMessage.constructSmilMessage();
 
 
@@ -45,7 +46,8 @@ async function getSentMessages(user){
     console.log("1")
     const q = FirebaseFirestore.query(
         FirebaseFirestore.collection(FirebaseFirestore.getFirestore(), "messages"), 
-        FirebaseFirestore.where(Args.COMPOSER, "==", user.email), 
+        FirebaseFirestore.where(Args.COMPOSER, "==", user.email),
+        FirebaseFirestore.where("state", "==", "sent"),
         FirebaseFirestore.orderBy("time_stamp", "desc")
         );
 
@@ -72,7 +74,8 @@ async function getInboxMessages(user){
     console.log(Args.RECEPIENT);
     const q = FirebaseFirestore.query(
         FirebaseFirestore.collection(FirebaseFirestore.getFirestore(), "messages"), 
-        FirebaseFirestore.where("recepient", "==", user.email), 
+        FirebaseFirestore.where("recepient", "==", user.email),
+        FirebaseFirestore.where("state", "==", "sent"),
         FirebaseFirestore.orderBy("time_stamp", "desc")
         );
 
@@ -102,7 +105,8 @@ async function getDrafts(user){
     console.log(Args.RECEPIENT);
     const q = FirebaseFirestore.query(
         FirebaseFirestore.collection(FirebaseFirestore.getFirestore(), "messages"), 
-        FirebaseFirestore.where(Args.COMPOSER, "==", user.email), 
+        FirebaseFirestore.where(Args.COMPOSER, "==", user.email),
+        FirebaseFirestore.where("state", "==", "draft"),
         FirebaseFirestore.orderBy("time_stamp", "desc")
         );
 
@@ -128,4 +132,5 @@ module.exports = {
     uploadMessage,
     getSentMessages,
     getInboxMessages,
+    getDrafts,
 }

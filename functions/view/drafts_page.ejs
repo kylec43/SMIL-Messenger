@@ -14,7 +14,7 @@
             <div>
                 <div class="smil-message-list-row-header"  style="margin: 30px 0px 0px;">
                     <div class="col-sm-3 overflow-hidden inline-block">
-                        <p style="margin-bottom: 0px;">From</p>
+                        <p style="margin-bottom: 0px;">To</p>
                     </div>
                     <div class="col-sm-1 overflow-hidden inline-block smil-seperator">
                     </div>
@@ -28,18 +28,18 @@
                     </div>
                 </div>
                 <hr style="margin: 0px;">
-                <% for(let i = 0; i < inboxMessages.length; i++) { %>
+                <% for(let i = 0; i < drafts.length; i++) { %>
                     <div class="smil-list-row-container">
                         <a class="smil-list-button" href="#" style="text-decoration: none;">
                             <div class="smil-message-list-row">
                                 <div class="col-sm-3 smil-list-col overflow-hidden inline-block">
-                                    <p style="margin-bottom: 0px;"><%= drafts[i].composer %></p>
+                                    <p style="margin-bottom: 0px;"><%= drafts[i].recepient === "" ? "<<Empty>>" : drafts[i].recepient %></p>
                                 </div>
                                 <div class="col-sm-1 overflow-hidden smil-seperator inline-block">
                                     <p style="margin-bottom: 0px;">-</p>
                                 </div>
                                 <div class="col-sm-5 smil-list-col overflow-hidden inline-block">
-                                    <p style="margin-bottom: 0px;"><%= drafts[i].subject %></p>
+                                    <p style="margin-bottom: 0px;"><%= drafts[i].subject === "" ? "<<Empty>>" : drafts[i].subject %></p>
                                 </div>
                                 <div class="col-sm-1 overflow-hidden smil-seperator inline-block"></div>
                                 <div class="col-sm-2 smil-list-col inline-block">
@@ -52,6 +52,7 @@
                 <% } %>
             </div>
         </div>
+
         <!--Scripts-->
         <%- include('partials/scripts.ejs') %>
     </body>
