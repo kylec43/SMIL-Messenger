@@ -10,6 +10,9 @@
     </head>
     <body onload="buildTable();">
     <!-- <body> -->
+        <div class="smil-media-player-background-shade" style="display: none" id="smil_media_player_background_shade"></div>
+        <div class="smil-media-player-container" id="smil_media_player_container">
+        </div>
 
         <%- include('partials/navbar.ejs', {page: 'compose', user}) %>
 
@@ -60,16 +63,19 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-1 col-md-2 col-lg-3">
+                    <div class="col-sm-1 col-md-1 col-lg-2">
 
                     </div>
-                    <div class="col-sm-4 col-md-3 col-lg-2">
+                    <div class="col-sm-3 col-md-3 col-lg-2 inner-center">
+                        <button type="button" class="btn btn-lg btn-primary" onclick="openVideo()">Preview</button>
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-2 inner-center">
                         <button type="submit" class="btn btn-lg btn-primary" formaction="/compose-draft">Save Draft</button>
                     </div>
-                    <div class="col-sm-4 col-md-3 col-lg-2">
+                    <div class="col-sm-3 col-md-3 col-lg-2 inner-center">
                         <button type="submit" class="btn btn-lg btn-primary" formaction="/compose-send">Send</button>
                     </div>
-                    <div class="col-sm-3 col-md-4 col-lg-5">
+                    <div class="col-sm-1 col-md-1 col-lg-4">
 
                     </div>
                 </div>
@@ -82,10 +88,41 @@
 
         <script type="text/javascript">
 
+            var smilMediaPlayerContainer = document.getElementById('smil_media_player_container');
+            var mediaPlayer = GetSmilPlayer(smilMediaPlayerContainer);
+            mediaPlayer.onClose(()=>{
+                document.getElementById('smil_media_player_background_shade').style.display = "none";
+            });
+
             $('#compose_form').submit(function() {
                 buildSmilMessage();
                 return true;
             });
+
+            function openVideo(){
+                var $composeForm = $('#compose_form');
+                if (!$composeForm[0].checkValidity()){
+                    $composeForm[0].reportValidity();
+                    return;
+                }
+                buildSmilMessage();
+                let message = document.getElementById("smil_text").value;
+                let subject = document.getElementById("subject").value;
+                let from = "<%= user.email %>";
+                console.log(message);
+
+                let videoTitle = 
+                `
+                From: ${from}<br>
+                Subject: ${subject}
+                `;                
+                
+                console.log(`Message is ${message}`);
+                let opened = mediaPlayer.open(message, videoTitle); 
+                if(opened){ 
+                    document.getElementById('smil_media_player_background_shade').style.display="block";  
+                }    
+            }
 
             function onPressTest(){
                 buildSmilMessage();
