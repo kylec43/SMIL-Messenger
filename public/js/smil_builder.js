@@ -14,13 +14,13 @@ window.buildSmilMessage = function(){
 
     console.log("Getting doc");
     var xmlDoc = domBuilder.parseFromString(template, "text/xml");
-
     let bodyTag = xmlDoc.getElementsByTagName("body")[0];
 
     let parElements = {};
 
     console.log("Iterating elements");
-    for(let i = 0; true; i++){
+    let found = 0;
+    for(let i = 0; found < row_count; i++){
         console.log(`Element Count ${i+1}`);
         let elementText = document.getElementsByName(`elem[${i}][txt]`)[0];
         let elementBegin = document.getElementsByName(`elem[${i}][begin]`)[0];
@@ -37,7 +37,7 @@ window.buildSmilMessage = function(){
         }
         if(!elementText || !elementBegin || !elementDuration){
             console.log("A value is null");
-            break;
+            continue;
         } else {
             console.log("values are not null");
             if(parElements[elementBegin.value]){
@@ -57,6 +57,8 @@ window.buildSmilMessage = function(){
                     text: elementText.value 
                 });
             }
+
+            found++;
         }
 
     }

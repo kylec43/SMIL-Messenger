@@ -98,7 +98,7 @@ app.post('/compose-draft', authAndRedirectLogin, async (req, res) => {
 
     return res.render(Pages.COMPOSE_PAGE, {errorMessage: null, user: req.user});
 
-    // return await MessageManager.uploadMessage(req, res, "draft");
+    return await MessageManager.uploadMessage(req, res, "draft");
 });
 
 
