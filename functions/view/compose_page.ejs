@@ -33,7 +33,6 @@
                 </div>
                 <div class="smil-compose-form">
                     <div id="smil-table">
-                        <table class="table-striped">
                         <!-- <thead>
                                 <tr>
                                     <th></th>
@@ -43,22 +42,34 @@
                                     <th></th>
                                 </tr>
                             </thead> -->
-                            <thead>
-                                <div id="smil-header-row">
-                                </div>
-                            </thead>
+                            <div class="row smil-compose-row-header" id="smil-header-row">
+                            </div>
                             <div id="smil-element-rows">
                                 <!-- <div class="form-inline"> -->
                                 <!-- <div class="form-group col-sm-10"> -->
                                 <!-- <div class="form-group input-group">    -->
 
                             </div>
+                            <div class="row" style="margin: 10px 0px;">
+                                <div class="col-sm-10"></div>
+                                <div class="col-sm-2"><input type="button" value="+" style="font-size: 1.5rem; font-weight: bold;" onclick="addRow()"></div>
+                            </div>
                         </table>
                     </div>
                 </div>
-                <div class="form-inline">
-                    <button type="submit" class="btn btn-primary margin-center" formaction="/compose-draft">Save Draft</button>
-                    <button type="submit" class="btn btn-primary margin-center" formaction="/compose-send">Send</button>
+                <div class="row">
+                    <div class="col-sm-1 col-md-2 col-lg-3">
+
+                    </div>
+                    <div class="col-sm-4 col-md-3 col-lg-2">
+                        <button type="submit" class="btn btn-lg btn-primary" formaction="/compose-draft">Save Draft</button>
+                    </div>
+                    <div class="col-sm-4 col-md-3 col-lg-2">
+                        <button type="submit" class="btn btn-lg btn-primary" formaction="/compose-send">Send</button>
+                    </div>
+                    <div class="col-sm-3 col-md-4 col-lg-5">
+
+                    </div>
                 </div>
             </form>
         </div>
@@ -67,7 +78,7 @@
         <%- include('partials/scripts.ejs') %>
 
         <script type="text/javascript">
-            
+            buildSmilMessage();
             var row_count = 0;
 
             console.log("row_count:" + row_count)
@@ -79,14 +90,13 @@
             
             function addHeader() {
               document.querySelector('#smil-header-row').insertAdjacentHTML(
-                'afterEnd',
-                `<tr>
-                    <th></th>
-                    <th>Start</th>
-                    <th>Duration</th>
-                    <th>Message</th>
-                    <th></th>
-                </tr>` 
+                'beforeend',
+                `
+                    <div class="col-sm-2">Start</div>
+                    <div class="col-sm-2">Duration</div>
+                    <div class="col-sm-7">Message</div>
+                    <div class="col-sm-1"></div>
+                ` 
                 )
             }
 
@@ -94,14 +104,13 @@
             function addRow() {
               document.querySelector('#smil-element-rows').insertAdjacentHTML(
                 'beforeend',
-                `<div id="input-group#${row_count}" class="input-group">
-                    <tr>
-                        <td><input type="button" value="+" onclick="addRow()"></td>
-                        <td><input class="form-control" name="elem[${row_count}][begin]" type="number" min="0" required/></td>
-                        <td><input class="form-control" name="elem[${row_count}][dur]" type="number" min="1" max="30" required/></td>
-                        <td><textarea class="form-control" name="elem[${row_count}][txt]" rows="1" minlength="1" maxlength="30" required/></textarea></td>
-                        <td><input type="button" value="X" onclick="removeRow(this)"></td>
-                    </tr>
+                `<div class="row" style="margin: 10px 0px;">
+                    <div id="input-group#${row_count}" class="input-group">
+                        <div class="col-sm-2"><input class="form-control" name="elem[${row_count}][begin]" type="number" min="0" required/></div>
+                        <div class="col-sm-2"><input class="form-control" name="elem[${row_count}][dur]" type="number" min="1" max="30" required/></div>
+                        <div class="col-sm-6"><input type="text" class="form-control" name="elem[${row_count}][txt]" rows="1" minlength="1" maxlength="30" required/></input></div>
+                        <div class="col-sm-2"><input type="button" value="X" onclick="removeRow(this)" style="font-size: 1.2rem; font-weight: bold;"></div>
+                    </div>
                 </div>`
               )
               row_count++;
@@ -109,7 +118,11 @@
             }
 
             function removeRow (input) {
-              var group_id = input.parentNode.id
+                console.log(input);
+                var parent = input.parentNode.parentNode.parentNode;
+                console.log(parent);
+              var group_id = input.parentNode.parentNode.id;
+              console.log(`group id is ${group_id}`);
               var start_pos = group_id.indexOf("#")
               var group_id_len = group_id.length
               var group_id_num = group_id.substring(start_pos+1, group_id_len)
@@ -117,7 +130,7 @@
               console.log("row_count:" + row_count)
               if (row_count > 1)
               {
-                input.parentNode.remove()
+                input.parentNode.parentNode.parentNode.remove()
                 row_count--;
                 console.log("row_count:" + row_count)
               }
