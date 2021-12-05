@@ -106,12 +106,15 @@ app.post('/compose-draft', authAndRedirectLogin, async (req, res) => {
 
 
 app.get('/drafts', authAndRedirectLogin, (req, res) => {
-    res.render(Pages.DRAFTS_PAGE, {errorMessage: null, user: req.user});
+    let drafts = await MessageManager.getDrafts(req.user);
+    res.render(Pages.DRAFTS_PAGE, {errorMessage: null, user: req.user, drafts});
 });
 
 
-app.get('/inbox', authAndRedirectLogin, (req, res) => {
-    res.render(Pages.INBOX_PAGE, {errorMessage: null, user: req.user});
+app.get('/inbox', authAndRedirectLogin, async (req, res) => {
+    let inboxMessages = await MessageManager.getInboxMessages(req.user);
+    //console.log(`Inbox messages length is ${inboxMessages.length}`);
+    res.render(Pages.INBOX_PAGE, {errorMessage: null, user: req.user, inboxMessages});
 });
 
 

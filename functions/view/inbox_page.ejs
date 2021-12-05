@@ -8,10 +8,87 @@
         <%- include('partials/css.ejs') %>
     </head>
     <body>
-        
+        <div class="smil-media-player-background-shade" style="display: none" id="smil_media_player_background_shade"></div>
+        <div class="smil-media-player-container" id="smil_media_player_container">
+        </div>
+
         <%- include('partials/navbar.ejs', {page: 'inbox', user}) %>
+
+
+        <div class="sidebar-outside-container">
+            <div>
+                <div class="smil-message-list-row-header"  style="margin: 30px 0px 0px;">
+                    <div class="col-sm-3 overflow-hidden inline-block">
+                        <p style="margin-bottom: 0px;">From</p>
+                    </div>
+                    <div class="col-sm-1 overflow-hidden inline-block smil-seperator">
+                    </div>
+                    <div class="col-sm-5 overflow-hidden inline-block">
+                        <p style="margin-bottom: 0px;">Subject</p>
+                    </div>
+                    <div class="col-sm-1 overflow-hidden inline-block smil-seperator">
+                    </div>
+                    <div class="col-sm-2 overflow-hidden inline-block" style="display: inline-block;">
+                        <p style="margin-bottom: 0px;">Timestamp</p>
+                    </div>
+                </div>
+                <hr style="margin: 0px;">
+                <% for(let i = 0; i < inboxMessages.length; i++) { %>
+                    <div class="smil-list-row-container">
+                        <a class="smil-list-button" href="#" style="text-decoration: none;" onclick="openVideo(<%= i %>)">
+                            <div class="smil-message-list-row">
+                                <div class="col-sm-3 smil-list-col overflow-hidden inline-block">
+                                    <p style="margin-bottom: 0px;"><%= inboxMessages[i].composer %></p>
+                                </div>
+                                <div class="col-sm-1 overflow-hidden smil-seperator inline-block">
+                                    <p style="margin-bottom: 0px;">-</p>
+                                </div>
+                                <div class="col-sm-5 smil-list-col overflow-hidden inline-block">
+                                    <p style="margin-bottom: 0px;"><%= inboxMessages[i].subject %></p>
+                                </div>
+                                <div class="col-sm-1 overflow-hidden smil-seperator inline-block"></div>
+                                <div class="col-sm-2 smil-list-col inline-block">
+                                    <p style="margin-bottom: 0px;"><%=  inboxMessages[i].timeStampString  %></p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <hr style="margin: 0px;">
+                <% } %>
+            </div>
+        </div>
 
         <!--Scripts-->
         <%- include('partials/scripts.ejs') %>
+
+
+        <script>
+            var inboxMessages = <%- JSON.stringify(inboxMessages) %>;
+            var smilMediaPlayerContainer = document.getElementById('smil_media_player_container');
+            var mediaPlayer = GetSmilPlayer(smilMediaPlayerContainer);
+            mediaPlayer.onClose(()=>{
+                document.getElementById('smil_media_player_background_shade').style.display = "none";
+            });
+
+            function openVideo(messageIndex){
+                console.log(messageIndex);
+                let message = inboxMessages[messageIndex].smilMessage;
+                let subject = inboxMessages[messageIndex].subject;
+                let from = inboxMessages[messageIndex].composer;
+
+                let videoTitle = 
+                `
+                From: ${from}<br>
+                Subject: ${subject}
+                `;                
+                
+                console.log(`Message is ${message}`);
+                let opened = mediaPlayer.open(message, videoTitle); 
+                if(opened){ 
+                    document.getElementById('smil_media_player_background_shade').style.display="block";  
+                }    
+            }
+
+        </script>
     </body>
 </html>

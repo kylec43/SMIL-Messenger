@@ -46,6 +46,19 @@ class Message{
         }
         smilMessage += `</seq>\n`
         this.smilMessage = smilMessage;
+
+                /* Construct Smil message based off of textMessage and textDuration
+                let smilMessage = `
+                <smil>
+                    <head>
+                    </head>
+                    <body>
+                        <par>
+                            <smilText dur="${this.textDuration}s">${this.textMessage}</smilText>
+                        </par>
+                    </body>
+                </smil>
+            `*/
     }
 
     serialize(){
@@ -60,6 +73,13 @@ class Message{
         }
     }
 
+    getTimestampString(){
+        let date = new Date(this.timeStamp.seconds*1000);
+        date.setHours(date.getHours() - 6);
+        return date.toDateString() + " " + date.toLocaleTimeString('en-US');
+    }
+
+
     static deserialize(message){
         var deserializedMessage = new Message();
         deserializedMessage.setTimeStamp(message[Args.TIME_STAMP]);
@@ -69,6 +89,7 @@ class Message{
         deserializedMessage.setSubject(message[Args.SUBJECT]);
         deserializedMessage.setState(message[Args.STATE]);
         deserializedMessage.constructSmilMessage();
+        deserializedMessage.timeStampString = deserializedMessage.getTimestampString();
         return deserializedMessage;
     }
 }
