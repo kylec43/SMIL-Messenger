@@ -137,12 +137,12 @@ app.get('/logout', async (req, res) => {
 /* Middleware */
 
 // cb-test
-const FirebaseAuth = require("firebase/auth");
+//const FirebaseAuth = require("firebase/auth");
 
 async function authAndRedirectLogin(req, res, next){
     
     // cb-test
-    await FirebaseAuth.signInWithEmailAndPassword(FirebaseAuth.getAuth(), "cbeardain@uco.edu", "chad9999");
+    //await FirebaseAuth.signInWithEmailAndPassword(FirebaseAuth.getAuth(), "cbeardain@uco.edu", "chad9999");
 
     req.user = FirebaseAuthController.getCurrentUser();
     
@@ -158,7 +158,7 @@ async function authAndRedirectLogin(req, res, next){
 async function authAndRedirectInbox(req, res, next){
 
     // cb-test
-    await FirebaseAuth.signInWithEmailAndPassword(FirebaseAuth.getAuth(), "cbeardain@uco.edu", "chad9999");
+    //await FirebaseAuth.signInWithEmailAndPassword(FirebaseAuth.getAuth(), "cbeardain@uco.edu", "chad9999");
 
     req.user = FirebaseAuthController.getCurrentUser();
     
