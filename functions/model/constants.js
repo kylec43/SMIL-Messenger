@@ -22,6 +22,7 @@ firebase_args = {
     TEXT_MESSAGE: "text_message",
     SMIL_MESSAGE: "smil_message",
     SUBJECT: 'subject',
+    SMIL_MESSAGE: 'smil_message',
 }
 
 

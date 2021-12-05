@@ -13,8 +13,8 @@
 
         <%- include('partials/navbar.ejs', {page: 'compose', user}) %>
 
-         <div class="sidebar-outside-container">
-            <form method="post">
+        <div class="sidebar-outside-container">
+            <form method="post" id="compose_form">
                 <div class="smil-compose-form">
                     <div class="form-group">
                         <label for="recepient">Recepient:</label>
@@ -42,17 +42,19 @@
                                     <th></th>
                                 </tr>
                             </thead> -->
-                            <div class="row smil-compose-row-header" id="smil-header-row">
-                            </div>
-                            <div id="smil-element-rows">
-                                <!-- <div class="form-inline"> -->
-                                <!-- <div class="form-group col-sm-10"> -->
-                                <!-- <div class="form-group input-group">    -->
+                            <div class="container-fluid">
+                                <div class="row smil-compose-row-header" id="smil-header-row">
+                                </div>
+                                <div id="smil-element-rows">
+                                    <!-- <div class="form-inline"> -->
+                                    <!-- <div class="form-group col-sm-10"> -->
+                                    <!-- <div class="form-group input-group">    -->
 
-                            </div>
-                            <div class="row" style="margin: 10px 0px;">
-                                <div class="col-sm-10"></div>
-                                <div class="col-sm-2"><input type="button" value="+" style="font-size: 1.5rem; font-weight: bold;" onclick="addRow()"></div>
+                                </div>
+                                <div class="row" style="margin: 10px 0px;">
+                                    <div class="col-sm-10"></div>
+                                    <div class="col-sm-2"><input type="button" value="+" style="font-size: 1.5rem; font-weight: bold;" onclick="addRow()"></div>
+                                </div>
                             </div>
                         </table>
                     </div>
@@ -71,6 +73,7 @@
 
                     </div>
                 </div>
+                <input name="smil_text" id="smil_text" style="display: none" value="">
             </form>
         </div>
 
@@ -78,7 +81,15 @@
         <%- include('partials/scripts.ejs') %>
 
         <script type="text/javascript">
-            buildSmilMessage();
+
+            $('#compose_form').submit(function() {
+                buildSmilMessage();
+                return true;
+            });
+
+            function onPressTest(){
+                buildSmilMessage();
+            }
             var row_count = 0;
 
             console.log("row_count:" + row_count)

@@ -61,6 +61,10 @@ class Message{
             `*/
     }
 
+    setSmilMessage(message){
+        this.smilMessage = message;
+    }
+
     serialize(){
         return {
             "time_stamp": this.timeStamp,
@@ -88,7 +92,7 @@ class Message{
         deserializedMessage.setElements(message[Args.TEXT_MESSAGE]);
         deserializedMessage.setSubject(message[Args.SUBJECT]);
         deserializedMessage.setState(message[Args.STATE]);
-        deserializedMessage.constructSmilMessage();
+        deserializedMessage.setSmilMessage(message[Args.SMIL_MESSAGE]);
         deserializedMessage.timeStampString = deserializedMessage.getTimestampString();
         return deserializedMessage;
     }

@@ -105,7 +105,7 @@ app.post('/compose-draft', authAndRedirectLogin, async (req, res) => {
 // end-working ===================================================================
 
 
-app.get('/drafts', authAndRedirectLogin, (req, res) => {
+app.get('/drafts', authAndRedirectLogin, async (req, res) => {
     let drafts = await MessageManager.getDrafts(req.user);
     res.render(Pages.DRAFTS_PAGE, {errorMessage: null, user: req.user, drafts});
 });

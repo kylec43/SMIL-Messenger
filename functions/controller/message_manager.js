@@ -14,7 +14,8 @@ async function uploadMessage(req, res, state_arg){
         const subject = req.body.subject;
         const timeStamp = FirebaseFirestore.Timestamp.fromDate(new Date());
         const state = state_arg;
-        const elements = req.body.elem
+        const elements = req.body.elem;
+        const smilMessage = req.body.smil_text;
 
         /* Construct Message object */
         const newMessage = new Message();
@@ -24,7 +25,7 @@ async function uploadMessage(req, res, state_arg){
         newMessage.setElements(elements);
         newMessage.setSubject(subject);
         newMessage.setState(state);
-        newMessage.constructSmilMessage(elements);
+        newMessage.setSmilMessage(smilMessage);
 
         /* upload newMessage to doc location*/
         await FirebaseFirestore.addDoc(FirebaseFirestore.collection(FirebaseFirestore.getFirestore(), Folders.MESSAGE_FOLDER), newMessage.serialize());
