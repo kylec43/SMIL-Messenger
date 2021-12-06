@@ -80,7 +80,7 @@ app.post('/register', authAndRedirectInbox, (req, res) => {
 // }));
 
 app.get('/compose', authAndRedirectLogin, (req, res) => {
-    res.render(Pages.COMPOSE_PAGE, {errorMessage: null, user: req.user});
+    res.render(Pages.COMPOSE_PAGE, {errorMessage: null, user: req.user, draft: null});
 });
 
 app.post('/compose-send', authAndRedirectLogin, async (req, res) => {
@@ -88,17 +88,18 @@ app.post('/compose-send', authAndRedirectLogin, async (req, res) => {
 });
 
 app.post('/compose-draft', authAndRedirectLogin, async (req, res) => {
-    console.log("===============");
-    for (var i=0; i<req.body.elem.length; i++){
-        console.log(req.body.elem[i]['begin']);
-        console.log(req.body.elem[i]['dur']);
-        console.log(req.body.elem[i]['txt']);
-    }
-    console.log("===============");
-
-    return res.render(Pages.COMPOSE_PAGE, {errorMessage: null, user: req.user});
-
+    console.log("==========COMPOSE+==================DRAFT==========");
     return await MessageManager.uploadMessage(req, res, "draft");
+});
+
+
+app.post("/edit-draft", authAndRedirectLogin, (req, res) => {
+
+    var messageString = req.body.draft;
+    var messageObject = JSON.parse(messageString);
+    console.log(messageObject);
+    console.log(messageObject.recepient);
+    return res.render(Pages.COMPOSE_PAGE, {errorMessage: null, user: req.user, draft: messageObject});
 });
 
 

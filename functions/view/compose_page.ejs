@@ -23,14 +23,14 @@
                         <label for="recepient">Recepient:</label>
                         <div class="input-group">
                             <!-- cb-test: value -->
-                            <input class="form-control" name="recepient" id="recepient" type="email" required/>
+                            <input class="form-control" name="recepient" id="recepient" type="email" value="<%= draft ? draft.recepient : ''%>" required/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="recepient">Subject:</label>
                         <div class="input-group">
                             <!-- cb-test: value -->
-                            <input class="form-control" name="subject" id="subject" minlength="1" maxlength="100" required/>
+                            <input class="form-control" name="subject" id="subject" minlength="1" maxlength="100" value="<%= draft ? draft.subject : ''%>" required/>
                         </div>
                     </div>
                 </div>
@@ -80,6 +80,7 @@
                     </div>
                 </div>
                 <input name="smil_text" id="smil_text" style="display: none" value="">
+                <input id="draft" name="draft" value="" hidden>
             </form>
         </div>
 
@@ -87,6 +88,8 @@
         <%- include('partials/scripts.ejs') %>
 
         <script type="text/javascript">
+            var draft = <%- JSON.stringify(draft) %>;
+            document.getElementById("draft").value = JSON.stringify(draft);
 
             var smilMediaPlayerContainer = document.getElementById('smil_media_player_container');
             var mediaPlayer = GetSmilPlayer(smilMediaPlayerContainer);
@@ -132,7 +135,18 @@
             console.log("row_count:" + row_count)
 
             function buildTable() {
-                addRow();
+                if(draft !== null) {
+                    console.log("draft received");
+                    console.log(draft.recepient);
+                    console.log(draft);
+                    for(let i = 0; i < draft.elements.length; i++){
+                        addRow(draft.elements[i].begin, draft.elements[i].dur, draft.elements[i].txt);
+                    }
+                } else {
+                    console.log("draft not received");
+                    addRow();
+                }
+
                 addHeader();
             }
             
@@ -149,14 +163,14 @@
             }
 
 
-            function addRow() {
+            function addRow(begin = "", dur = "", message = "") {
               document.querySelector('#smil-element-rows').insertAdjacentHTML(
                 'beforeend',
                 `<div class="row" style="margin: 10px 0px;">
                     <div id="input-group#${row_count}" class="input-group">
-                        <div class="col-sm-2"><input class="form-control" name="elem[${row_count}][begin]" type="number" min="0" max="60" required/></div>
-                        <div class="col-sm-2"><input class="form-control" name="elem[${row_count}][dur]" type="number" min="1" max="30" required/></div>
-                        <div class="col-sm-6"><input type="text" class="form-control" name="elem[${row_count}][txt]" rows="1" minlength="1" maxlength="100" required/></input></div>
+                        <div class="col-sm-2"><input class="form-control" name="elem[${row_count}][begin]" type="number" min="0" max="60" value="${begin}" required/></div>
+                        <div class="col-sm-2"><input class="form-control" name="elem[${row_count}][dur]" type="number" min="1" max="30" value="${dur}" required/></div>
+                        <div class="col-sm-6"><input type="text" class="form-control" name="elem[${row_count}][txt]" rows="1" minlength="1" maxlength="100" value="${message}" required/></input></div>
                         <div class="col-sm-2"><button type="button" onclick="removeRow(this)" style="font-size: 1.5rem; font-weight: bold;"><i class="far fa-trash-alt"></i></button></div>
                     </div>
                 </div>`

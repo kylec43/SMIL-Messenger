@@ -10,6 +10,7 @@ class Message{
         this.subject = "";
         this.state = "";
         this.elements = "";
+        this.id = "";
     }
 
     setSubject(subject){
@@ -65,6 +66,11 @@ class Message{
         this.smilMessage = message;
     }
 
+
+    setId(id){
+        this.id = id;
+    }
+
     serialize(){
         return {
             "time_stamp": this.timeStamp,
@@ -84,15 +90,16 @@ class Message{
     }
 
 
-    static deserialize(message){
+    static deserialize(message, id){
         var deserializedMessage = new Message();
         deserializedMessage.setTimeStamp(message[Args.TIME_STAMP]);
         deserializedMessage.setComposer(message[Args.COMPOSER]);
         deserializedMessage.setRecepient(message[Args.RECEPIENT]);
-        deserializedMessage.setElements(message[Args.TEXT_MESSAGE]);
+        deserializedMessage.setElements(message[Args.ELEMENTS]);
         deserializedMessage.setSubject(message[Args.SUBJECT]);
         deserializedMessage.setState(message[Args.STATE]);
         deserializedMessage.setSmilMessage(message[Args.SMIL_MESSAGE]);
+        deserializedMessage.setId(id);
         deserializedMessage.timeStampString = deserializedMessage.getTimestampString();
         return deserializedMessage;
     }

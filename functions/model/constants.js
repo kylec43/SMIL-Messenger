@@ -19,7 +19,7 @@ firebase_args = {
     RECEPIENT: "recepient",
     COMPOSER: "composer",
     TEXT_DURATION: "text_duration",
-    TEXT_MESSAGE: "text_message",
+    ELEMENTS: "elements",
     SMIL_MESSAGE: "smil_message",
     SUBJECT: 'subject',
     SMIL_MESSAGE: 'smil_message',
