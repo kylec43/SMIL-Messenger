@@ -9,10 +9,6 @@
     </head>
     <body>
 
-        <div class="smil-media-player-background-shade" style="display: none" id="smil_media_player_background_shade"></div>
-        <div class="smil-media-player-container" id="smil_media_player_container">
-        </div>
-
         <%- include('partials/navbar.ejs', {page: 'sent', user}) %>
 
 
@@ -65,11 +61,7 @@
 
         <script>
             var sentMessages = <%- JSON.stringify(sentMessages) %>;
-            var smilMediaPlayerContainer = document.getElementById('smil_media_player_container');
-            var mediaPlayer = GetSmilPlayer(smilMediaPlayerContainer);
-            mediaPlayer.onClose(()=>{
-                document.getElementById('smil_media_player_background_shade').style.display = "none";
-            });
+            var mediaPlayer = new SmilPlayer();
 
             function openVideo(messageIndex){
                 console.log(messageIndex);
@@ -84,10 +76,7 @@
                 `;                
                 
                 console.log(`Message is ${message}`);
-                let opened = mediaPlayer.open(message, videoTitle); 
-                if(opened){ 
-                    document.getElementById('smil_media_player_background_shade').style.display="block";  
-                }    
+                mediaPlayer.open(message, videoTitle);  
             }
 
         </script>

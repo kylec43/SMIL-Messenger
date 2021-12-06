@@ -1,9 +1,7 @@
-class SmilPlayer{
+class SmilMediaPlayerClass{
 
-    construct(smilMediaPlayerContainer){
-        this.mediaPlayerContainer = smilMediaPlayerContainer;
+    constructor(){
         this.opened = false;
-        this.constructed = true;
         console.log("Created");
     }
     
@@ -171,60 +169,50 @@ class SmilPlayer{
 
         if(this.isOpen() === false){
             console.log("20");
-            this.mediaPlayerContainer.innerHTML = 
+            let body = document.querySelector("body");
+            let playerHTML = 
             `
-            <div class="row" style="width: 100%; background-color: lightgray;">
-                <div class="col-sm-11">
-                    ${videoTitle}
+            <div class="smil-media-player-background-shade" style="display: fixed" id="smil_media_player_background_shade"></div>
+            <div class="smil-media-player-container" id="smil_media_player_container">
+                <div class="row" style="width: 100%; background-color: lightgray;">
+                    <div class="col-sm-11">
+                        ${videoTitle}
+                    </div>
+                    <div class="col-sm-1 no-padding">
+                        <button class="smil-media-player-button" onclick="SMIL_MEDIA_PLAYER.close()"><i class="fas fa-times fa-2x"></i></button>
+                    </div>
                 </div>
-                <div class="col-sm-1 no-padding">
-                    <button class="smil-media-player-button" onclick="smilPlayer.close()"><i class="fas fa-times fa-2x"></i></button>
-                </div>
-            </div>
-            <div class="row smil-media-player">
-                <div class="col smil-media-player-content" id="smil_player_content">
+                <div class="row smil-media-player">
+                    <div class="col smil-media-player-content" id="smil_player_content">
 
+                    </div>
                 </div>
-            </div>
-            <div class="row" style="width: 100%">
-                <div class="col no-padding">
-                    <div class="progress smil-progress">
-                        <div
-                        id="progress_bar"
-                        class="progress-bar smil-progress-bar"
-                        role="progressbar"
-                        ></div>
+                <div class="row" style="width: 100%">
+                    <div class="col no-padding">
+                        <div class="progress smil-progress">
+                            <div
+                            id="progress_bar"
+                            class="progress-bar smil-progress-bar"
+                            role="progressbar"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="width: 100%; background-color: lightgray;">
+                    <div class="col-sm-1 no-padding">
+                        <button class="smil-media-player-button" id="play_button" onclick="SMIL_MEDIA_PLAYER.toggleVideo()"><i class="fas fa-play"></i></button>
+                    </div>
+                    <div class="col-sm-1 no-padding">
+                        <button class="smil-media-player-button" onclick="SMIL_MEDIA_PLAYER.stop()"><i class="fas fa-stop"></i></button>
+                    </div>
+                    <div class="col-sm-10 col-smil-elapsed-time" id="elapsed_time">
+                    0.00/0.00
                     </div>
                 </div>
             </div>
-            <div class="row" style="width: 100%; background-color: lightgray;">
-                <div class="col-sm-1 no-padding">
-                    <button class="smil-media-player-button" id="play_button" onclick="playVideo()"><i class="fas fa-play"></i></button>
-                </div>
-                <div class="col-sm-1 no-padding">
-                    <button class="smil-media-player-button" onclick="stopVideo()"><i class="fas fa-stop"></i></button>
-                </div>
-                <div class="col-sm-10 col-smil-elapsed-time" id="elapsed_time">
-                0.00/0.00
-                </div>
-            </div>
-            <script>
-                function playVideo(){
-                    if(!smilPlayer.videoIsPlaying() && !smilPlayer.videoIsDone()){
-                        smilPlayer.play();
-                    } else if(!smilPlayer.videoIsPlaying() && smilPlayer.videoIsDone()){
-                        smilPlayer.replay();
-                    } else {
-                        smilPlayer.pause();
-                    }
-                
-                }
-                
-                function stopVideo(){
-                    smilPlayer.stop(playButton, progressBar, elapsedTime);
-                }
-            </script>
             `;
+
+            body.insertAdjacentHTML("afterbegin", playerHTML);
 
             this.contentDiv = document.getElementById('smil_player_content');
             this.playButton = document.getElementById('play_button');
@@ -243,6 +231,8 @@ class SmilPlayer{
             this.opened = true;
             
             return true;
+        } else {
+            return false;
         }
     }
 
@@ -259,7 +249,8 @@ class SmilPlayer{
                 if(player.playFunctionRunning){
                     setTimeout(()=>{waitPlayFunction(player);}, 1);
                 } else {
-                    player.mediaPlayerContainer.innerHTML = ``;
+                    document.getElementById("smil_media_player_background_shade").remove();
+                    document.getElementById("smil_media_player_container").remove();
                     player.opened = false;
                     console.log("Video has been stopped");
                     if(player.closeFunction !== undefined){
@@ -276,32 +267,22 @@ class SmilPlayer{
     }
 
 
-}
-
-
-
-function playVideo(){
-    if(!smilPlayer.videoIsPlaying() && !smilPlayer.videoIsDone()){
-        smilPlayer.play();
-    } else if(!smilPlayer.videoIsPlaying() && smilPlayer.videoIsDone()){
-        smilPlayer.replay();
-    } else {
-        smilPlayer.pause();
+    toggleVideo(){
+        if(!SMIL_MEDIA_PLAYER.videoIsPlaying() && !SMIL_MEDIA_PLAYER.videoIsDone()){
+            SMIL_MEDIA_PLAYER.play();
+        } else if(!SMIL_MEDIA_PLAYER.videoIsPlaying() && SMIL_MEDIA_PLAYER.videoIsDone()){
+            SMIL_MEDIA_PLAYER.replay();
+        } else {
+            SMIL_MEDIA_PLAYER.pause();
+        }
+    
     }
 
+
 }
 
-function stopVideo(){
-    smilPlayer.stop();
-}
+window.SMIL_MEDIA_PLAYER = new SmilMediaPlayerClass();
 
-
-window.smilPlayer = new SmilPlayer()
-
-
-window.GetSmilPlayer = function(smilMediaPlayerContainer){
-    if(!smilPlayer.constructed){
-        smilPlayer.construct(smilMediaPlayerContainer);
-    }
-    return smilPlayer;
+window.SmilPlayer = function(){
+    return SMIL_MEDIA_PLAYER;
 }

@@ -15,10 +15,6 @@
             </div>
             <hr>
             <div class="card-body smil-form-body">
-                <% if (errorMessage !== null) { %>
-                    <p class="text-center smil-error-message"><%- errorMessage %></p>
-                    <br>
-                <% } %>
                 <form action="/register" method="post">
                     <div class="form-group">
                         <div class="input-group">
@@ -63,5 +59,11 @@
 
         <!--Scripts-->
         <%- include('partials/scripts.ejs') %>
+
+        <script>
+            <% if (alertMessage !== null) { %>
+                alert("<%= alertMessage %>");
+            <% } %>
+        </script>
     </body>
 </html>

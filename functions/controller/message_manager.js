@@ -17,8 +17,19 @@ async function uploadMessage(req, res, state_arg){
         const elements = req.body.elem;
         const smilMessage = req.body.smil_text;
         const draft = JSON.parse(req.body.draft);
+        let alertMessage = "";
+
+        if(state_arg === "sent"){
+            alertMessage = "Message has been sent!";
+        } else {
+            alertMessage = "Draft has been saved!";
+        }
+
         if(draft !== null){
             await deleteMessage(draft.id);
+            if(state_arg === "draft"){
+                alertMessage = "Draft has been updated!";
+            }
         }
 
 
@@ -36,10 +47,10 @@ async function uploadMessage(req, res, state_arg){
         await FirebaseFirestore.addDoc(FirebaseFirestore.collection(FirebaseFirestore.getFirestore(), Folders.MESSAGE_FOLDER), newMessage.serialize());
 
         console.log("END============================================");
-        return res.render(Pages.COMPOSE_PAGE, {errorMessage: null, user: req.user, draft: null});
+        return res.render(Pages.COMPOSE_PAGE, {alertMessage, user: req.user, draft: null});
     } catch(e){
         console.log(`upload failed: ${e}`);
-        return res.render(Pages.COMPOSE_PAGE, {errorMessage: `${e}`, user: req.user, draft: null});
+        return res.render(Pages.COMPOSE_PAGE, {alertMessage: `${e}`, user: req.user, draft: null});
     }
 }
 

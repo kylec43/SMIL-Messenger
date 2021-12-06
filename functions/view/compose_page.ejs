@@ -8,11 +8,8 @@
         <%- include('partials/css.ejs') %>
         <%- include('partials/favicon.ejs') %>
     </head>
-    <body onload="buildTable();">
+    <body>
     <!-- <body> -->
-        <div class="smil-media-player-background-shade" style="display: none" id="smil_media_player_background_shade"></div>
-        <div class="smil-media-player-container" id="smil_media_player_container">
-        </div>
 
         <%- include('partials/navbar.ejs', {page: 'compose', user}) %>
 
@@ -70,7 +67,7 @@
                         <button type="button" class="btn btn-lg btn-primary" onclick="openVideo()">Preview</button>
                     </div>
                     <div class="col-sm-4 col-md-4 col-lg-2 inner-center">
-                        <button type="submit" class="btn btn-lg btn-primary" formaction="/compose-draft">Save Draft</button>
+                        <button type="submit" class="btn btn-lg btn-primary" formaction="/compose-draft" onclick="removeRequired();">Save Draft</button>
                     </div>
                     <div class="col-sm-3 col-md-3 col-lg-2 inner-center">
                         <button type="submit" class="btn btn-lg btn-primary" formaction="/compose-send">Send</button>
@@ -88,19 +85,37 @@
         <%- include('partials/scripts.ejs') %>
 
         <script type="text/javascript">
+
+            /* Declarations, Initializations */
+
             var draft = <%- JSON.stringify(draft) %>;
             document.getElementById("draft").value = JSON.stringify(draft);
+            var mediaPlayer = new SmilPlayer();
+            var row_count = 0;
 
-            var smilMediaPlayerContainer = document.getElementById('smil_media_player_container');
-            var mediaPlayer = GetSmilPlayer(smilMediaPlayerContainer);
-            mediaPlayer.onClose(()=>{
-                document.getElementById('smil_media_player_background_shade').style.display = "none";
-            });
+            window.onload = function(){
+                buildTable();
+                <% if(alertMessage !== null) { %>
+                    alert("<%= alertMessage %>");
+                <% } %>
+            }
+
+
+
+
+            /* Functions */
 
             $('#compose_form').submit(function() {
                 buildSmilMessage();
                 return true;
             });
+
+            function removeRequired(){
+                requiredElements = document.querySelectorAll("[required]");
+                for(elem of requiredElements){
+                    elem.required = false;
+                }
+            }
 
             function openVideo(){
                 var $composeForm = $('#compose_form');
@@ -123,16 +138,13 @@
                 console.log(`Message is ${message}`);
                 let opened = mediaPlayer.open(message, videoTitle); 
                 if(opened){ 
-                    document.getElementById('smil_media_player_background_shade').style.display="block";  
+                    console.log("Player was opened");
                 }    
             }
 
             function onPressTest(){
                 buildSmilMessage();
             }
-            var row_count = 0;
-
-            console.log("row_count:" + row_count)
 
             function buildTable() {
                 if(draft !== null) {
@@ -162,7 +174,7 @@
                 )
             }
 
-
+            
             function addRow(begin = "", dur = "", message = "") {
               document.querySelector('#smil-element-rows').insertAdjacentHTML(
                 'beforeend',

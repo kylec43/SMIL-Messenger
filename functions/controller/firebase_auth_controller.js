@@ -13,7 +13,7 @@ async function loginUser(req, res){
     })
     .catch((e) => {
         console.log(`Error: ${e}`)
-        return res.render(Pages.LOGIN_PAGE, {errorMessage: `${e}`, successMessage: null});
+        return res.render(Pages.LOGIN_PAGE, {alertMessage: `${e}`});
     });
     
 }
@@ -60,15 +60,15 @@ async function registerUser(req, res)
         }
 
         if(errorMessage.length > 0){
-            return res.render(Pages.REGISTER_PAGE, {errorMessage, successMessage: null, user: req.user});
+            return res.render(Pages.REGISTER_PAGE, {alertMessage: errorMessage, successMessage: null, user: req.user});
         } else {
             await FirebaseAuth.createUserWithEmailAndPassword(FirebaseAuth.getAuth(), email, password);
             console.log(getCurrentUser() ? "true" : "false");
-            return res.render(Pages.LOGIN_PAGE, {errorMessage: null, user: req.user, successMessage: "Registration Successful! Please Log In"});
+            return res.render(Pages.LOGIN_PAGE, {alertMessage: "Registration Successful! Please Log In", user: req.user});
         }
 
     } catch (e) {
-        return res.render(Pages.REGISTER_PAGE, {errorMessage: `${e}`, successMessage: null, user: req.user});
+        return res.render(Pages.REGISTER_PAGE, {alertMessage: `${e}`, user: req.user});
     }
 
 }
@@ -95,9 +95,9 @@ async function sendPasswordResetLink(req, res)
 {
     const email = req.body.user_email;
     await FirebaseAuth.sendPasswordResetEmail(FirebaseAuth.getAuth(), email).then(()=>{
-        return res.render(Pages.LOGIN_PAGE, {errorMessage: null, successMessage: "Password Reset Link Sent!"});
+        return res.render(Pages.LOGIN_PAGE, {alertMessage: "Password Reset Link Sent!"});
     }).catch(e => {
-        return res.render(Pages.FORGOT_PASSWORD_PAGE, {errorMessage: `${e}`});
+        return res.render(Pages.FORGOT_PASSWORD_PAGE, {alertMessage: `${e}`});
     });
 }
 
@@ -108,7 +108,7 @@ async function logoutUser(req, res){
         return res.redirect('/login');
     })
     .catch((e) => {
-        return res.render(Pages.LOGIN_PAGE, {errorMessage: `${e}`, successMessage: null});
+        return res.render(Pages.LOGIN_PAGE, {alertMessage: `${e}`});
     });
 }
 
