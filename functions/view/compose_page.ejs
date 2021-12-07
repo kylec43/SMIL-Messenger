@@ -92,6 +92,7 @@
             document.getElementById("draft").value = JSON.stringify(draft);
             var mediaPlayer = new SmilPlayer();
             var row_count = 0;
+            var rowId = 0;
 
             window.onload = function(){
                 buildTable();
@@ -179,15 +180,16 @@
               document.querySelector('#smil-element-rows').insertAdjacentHTML(
                 'beforeend',
                 `<div class="row" style="margin: 10px 0px;">
-                    <div id="input-group#${row_count}" class="input-group">
-                        <div class="col-sm-2"><input class="form-control" name="elem[${row_count}][begin]" type="number" min="0" max="60" value="${begin}" required/></div>
-                        <div class="col-sm-2"><input class="form-control" name="elem[${row_count}][dur]" type="number" min="1" max="30" value="${dur}" required/></div>
-                        <div class="col-sm-6"><input type="text" class="form-control" name="elem[${row_count}][txt]" rows="1" minlength="1" maxlength="100" value="${message}" required/></input></div>
+                    <div id="input-group#${rowId}" class="input-group">
+                        <div class="col-sm-2"><input class="form-control" name="elem[${rowId}][begin]" type="number" min="0" max="60" value="${begin}" required/></div>
+                        <div class="col-sm-2"><input class="form-control" name="elem[${rowId}][dur]" type="number" min="1" max="30" value="${dur}" required/></div>
+                        <div class="col-sm-6"><input type="text" class="form-control" name="elem[${rowId}][txt]" rows="1" minlength="1" maxlength="100" value="${message}" required/></input></div>
                         <div class="col-sm-2"><button type="button" onclick="removeRow(this)" style="font-size: 1.5rem; font-weight: bold;"><i class="far fa-trash-alt"></i></button></div>
                     </div>
                 </div>`
               )
               row_count++;
+              rowId++;
               console.log("row_count:" + row_count)
             }
 

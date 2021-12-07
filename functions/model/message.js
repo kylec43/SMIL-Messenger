@@ -30,6 +30,7 @@ class Message{
     }
 
     setElements(elements){
+        console.log(elements)
         this.elements = elements;
     }
 
