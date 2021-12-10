@@ -47,6 +47,7 @@ async function uploadMessage(req, res, state_arg){
 
         // console.log("END============================================");
         return res.render(Pages.COMPOSE_PAGE, {alertMessage, user: req.user, draft: null});
+
     } catch(e){
         console.log(`upload failed: ${e}`);
         return res.render(Pages.COMPOSE_PAGE, {alertMessage: `${e}`, user: req.user, draft: null});
@@ -61,7 +62,6 @@ async function deleteMessage(id){
 
 
 async function getSentMessages(user){
-
     const q = FirebaseFirestore.query(
         FirebaseFirestore.collection(FirebaseFirestore.getFirestore(), "messages"), 
         FirebaseFirestore.where(Args.COMPOSER, "==", user.email),
@@ -83,9 +83,8 @@ async function getSentMessages(user){
 
 
 async function getInboxMessages(user){
-
     try{
-    console.log("1");
+    // console.log("1");
     console.log(Args.RECEPIENT);
     const q = FirebaseFirestore.query(
         FirebaseFirestore.collection(FirebaseFirestore.getFirestore(), "messages"), 
@@ -94,11 +93,10 @@ async function getInboxMessages(user){
         FirebaseFirestore.orderBy("time_stamp", "desc")
         );
 
-    console.log("2");
+    // console.log("2");
     querySnapshot = await FirebaseFirestore.getDocs(q);
 
-
-    console.log("3");
+    // console.log("3");
     var messages = [];
     querySnapshot.forEach((doc) => {
         // console.log(`THE ID is ${doc.id}====================================`);
@@ -115,9 +113,8 @@ async function getInboxMessages(user){
 
 
 async function getDrafts(user){
-
     try{
-    console.log("1");
+    // console.log("1");
     console.log(Args.RECEPIENT);
     const q = FirebaseFirestore.query(
         FirebaseFirestore.collection(FirebaseFirestore.getFirestore(), "messages"), 
@@ -126,10 +123,10 @@ async function getDrafts(user){
         FirebaseFirestore.orderBy("time_stamp", "desc")
         );
 
-    console.log("2");
+    // console.log("2");
     querySnapshot = await FirebaseFirestore.getDocs(q);
 
-    console.log("3");
+    // console.log("3");
     var messages = [];
     querySnapshot.forEach((doc) => {
         // console.log(`THE ID is ${doc.id}====================================`);
