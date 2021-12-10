@@ -72,12 +72,6 @@ app.post('/register', authAndRedirectInbox, (req, res) => {
    return FirebaseAuthController.registerUser(req, res);
 });
 
-// cb-working =======================================================================
-
-// app.use(express.json());    // <==== parse request body as JSON
-// app.use(express.urlencoded({
-//   extended: true
-// }));
 
 app.get('/compose', authAndRedirectLogin, (req, res) => {
     res.render(Pages.COMPOSE_PAGE, {alertMessage: null, user: req.user, draft: null});
@@ -88,7 +82,7 @@ app.post('/compose-send', authAndRedirectLogin, async (req, res) => {
 });
 
 app.post('/compose-draft', authAndRedirectLogin, async (req, res) => {
-    console.log("==========COMPOSE+==================DRAFT==========");
+    // console.log("==========COMPOSE+==================DRAFT==========");
     return await MessageManager.uploadMessage(req, res, "draft");
 });
 
@@ -97,14 +91,10 @@ app.post("/edit-draft", authAndRedirectLogin, (req, res) => {
 
     var messageString = req.body.draft;
     var messageObject = JSON.parse(messageString);
-    console.log(messageObject);
-    console.log(messageObject.recepient);
+    // console.log(messageObject);
+    // console.log(messageObject.recepient);
     return res.render(Pages.COMPOSE_PAGE, {alertMessage: null, user: req.user, draft: messageObject});
 });
-
-
-// end-working ===================================================================
-
 
 app.get('/drafts', authAndRedirectLogin, async (req, res) => {
     let drafts = await MessageManager.getDrafts(req.user);
@@ -121,7 +111,7 @@ app.get('/inbox', authAndRedirectLogin, async (req, res) => {
 
 app.get('/sent', authAndRedirectLogin, async (req, res) => {
     let sentMessages = await MessageManager.getSentMessages(req.user);
-    console.log(`Sent messages length is ${sentMessages.length}`);
+    // console.log(`Sent messages length is ${sentMessages.length}`);
     res.render(Pages.SENT_PAGE, {alertMessage: null, user: req.user, sentMessages});
 });
 
@@ -135,16 +125,7 @@ app.get('/logout', async (req, res) => {
 })
 
 
-/* Middleware */
-
-// cb-test
-//const FirebaseAuth = require("firebase/auth");
-
 async function authAndRedirectLogin(req, res, next){
-    
-    // cb-test
-    //await FirebaseAuth.signInWithEmailAndPassword(FirebaseAuth.getAuth(), "cbeardain@uco.edu", "chad9999");
-
     req.user = FirebaseAuthController.getCurrentUser();
     
     if(req.user){
@@ -157,10 +138,6 @@ async function authAndRedirectLogin(req, res, next){
 
 
 async function authAndRedirectInbox(req, res, next){
-
-    // cb-test
-    //await FirebaseAuth.signInWithEmailAndPassword(FirebaseAuth.getAuth(), "cbeardain@uco.edu", "chad9999");
-
     req.user = FirebaseAuthController.getCurrentUser();
     
     if(req.user){
