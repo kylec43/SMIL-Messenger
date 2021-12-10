@@ -20,15 +20,15 @@ async function uploadMessage(req, res, state_arg){
         let alertMessage = "";
 
         if(state_arg === "sent"){
-            alertMessage = "Message has been sent!";
+            alertMessage = "Message Sent";
         } else {
-            alertMessage = "Draft has been saved!";
+            alertMessage = "Draft Saved";
         }
 
         if(draft !== null){
             await deleteMessage(draft.id);
             if(state_arg === "draft"){
-                alertMessage = "Draft has been updated!";
+                alertMessage = "Draft Updated";
             }
         }
 
