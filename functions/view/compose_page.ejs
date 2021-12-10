@@ -3,16 +3,12 @@
     <head>
         <meta charset="utf-8">
         <title>SMIL Messenger</title>
-
         <!-- CSS and favicon -->
         <%- include('partials/css.ejs') %>
         <%- include('partials/favicon.ejs') %>
     </head>
     <body>
-    <!-- <body> -->
-
         <%- include('partials/navbar.ejs', {page: 'compose', user}) %>
-
         <div class="sidebar-outside-container">
             <form method="post" id="compose_form">
                 <div class="smil-compose-form">
@@ -33,23 +29,10 @@
                 </div>
                 <div class="smil-compose-form">
                     <div id="smil-table">
-                        <!-- <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Start</th>
-                                    <th>Duration</th>
-                                    <th>Message</th>
-                                    <th></th>
-                                </tr>
-                            </thead> -->
                             <div class="container-fluid">
                                 <div class="row smil-compose-row-header" id="smil-header-row">
                                 </div>
                                 <div id="smil-element-rows">
-                                    <!-- <div class="form-inline"> -->
-                                    <!-- <div class="form-group col-sm-10"> -->
-                                    <!-- <div class="form-group input-group">    -->
-
                                 </div>
                                 <div class="row" style="margin: 10px 0px;">
                                     <div class="col-sm-10"></div>
@@ -101,7 +84,6 @@
                 <% } %>
             }
 
-
             /* Confirm navigating away from a modified form to avoid data loss */
 
            "use strict";
@@ -148,7 +130,6 @@
                 }
             });
             })();
-
 
             /* Functions */
 
@@ -221,7 +202,6 @@
                 )
             }
 
-            
             function addRow(begin = "", dur = "", message = "") {
               document.querySelector('#smil-element-rows').insertAdjacentHTML(
                 'beforeend',
