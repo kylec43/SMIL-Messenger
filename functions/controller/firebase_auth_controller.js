@@ -2,6 +2,7 @@ var Pages = require('../model/constants.js').pages;
 const FirebaseAuth = require("firebase/auth");
 var FirebaseAdmin = require('firebase-admin');
 
+
 async function loginUser(req, res){
 
     let email = req.body.user_email;
@@ -17,23 +18,6 @@ async function loginUser(req, res){
     });
     
 }
-
-// //cb-test
-// async function loginUser(req, res){
-
-//     let email = "cbeardain@uco.edu";
-//     let password = "chad9999";
-
-//     await FirebaseAuth.signInWithEmailAndPassword(FirebaseAuth.getAuth(), email, password)
-//     .then((userCredential) => {
-//         return res.redirect('/inbox');
-//     })
-//     .catch((e) => {
-//         console.log(`Error: ${e}`)
-//         return res.render(Pages.LOGIN_PAGE, {errorMessage: `${e}`, successMessage: null});
-//     });
-    
-// }
 
 
 async function registerUser(req, res) 
@@ -78,7 +62,6 @@ function getCurrentUser(){
     return FirebaseAuth.getAuth().currentUser;
 }
 
-
 async function generateToken(user){
     let token = null;
     await FirebaseAdmin.auth().createCustomToken(user.uid).then((customToken) => {
@@ -91,6 +74,7 @@ async function generateToken(user){
     return token;
 }
 
+
 async function sendPasswordResetLink(req, res) 
 {
     const email = req.body.user_email;
@@ -100,6 +84,7 @@ async function sendPasswordResetLink(req, res)
         return res.render(Pages.FORGOT_PASSWORD_PAGE, {alertMessage: `${e}`});
     });
 }
+
 
 async function logoutUser(req, res){
 

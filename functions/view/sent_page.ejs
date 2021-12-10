@@ -8,9 +8,7 @@
         <%- include('partials/css.ejs') %>
     </head>
     <body>
-
         <%- include('partials/navbar.ejs', {page: 'sent', user}) %>
-
 
         <div class="sidebar-outside-container">
             <div>
@@ -58,7 +56,6 @@
         <!--Scripts-->
         <%- include('partials/scripts.ejs') %>
 
-
         <script>
             var sentMessages = <%- JSON.stringify(sentMessages) %>;
             var mediaPlayer = new SmilPlayer();
@@ -78,7 +75,6 @@
                 console.log(`Message is ${message}`);
                 mediaPlayer.open(message, videoTitle);  
             }
-
         </script>
     </body>
 </html>

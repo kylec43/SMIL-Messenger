@@ -32,7 +32,6 @@ async function uploadMessage(req, res, state_arg){
             }
         }
 
-
         /* Construct Message object */
         const newMessage = new Message();
         newMessage.setComposer(req.user.email);
@@ -46,7 +45,7 @@ async function uploadMessage(req, res, state_arg){
         /* upload newMessage to doc location*/
         await FirebaseFirestore.addDoc(FirebaseFirestore.collection(FirebaseFirestore.getFirestore(), Folders.MESSAGE_FOLDER), newMessage.serialize());
 
-        console.log("END============================================");
+        // console.log("END============================================");
         return res.render(Pages.COMPOSE_PAGE, {alertMessage, user: req.user, draft: null});
     } catch(e){
         console.log(`upload failed: ${e}`);
@@ -54,10 +53,12 @@ async function uploadMessage(req, res, state_arg){
     }
 }
 
+
 async function deleteMessage(id){
     const docRef = FirebaseFirestore.doc(FirebaseFirestore.getFirestore(), 'messages', id);
     await FirebaseFirestore.deleteDoc(docRef);
 }
+
 
 async function getSentMessages(user){
 
@@ -72,14 +73,13 @@ async function getSentMessages(user){
 
     var messages = [];
     querySnapshot.forEach((doc) => {
-        console.log(`THE ID is ${doc.id}====================================`);
+        // console.log(`THE ID is ${doc.id}====================================`);
         let message = Message.deserialize(doc.data(), doc.id);
         messages.push(message);
       });
 
     return messages;
 }
-
 
 
 async function getInboxMessages(user){
@@ -101,7 +101,7 @@ async function getInboxMessages(user){
     console.log("3");
     var messages = [];
     querySnapshot.forEach((doc) => {
-        console.log(`THE ID is ${doc.id}====================================`);
+        // console.log(`THE ID is ${doc.id}====================================`);
         let message = Message.deserialize(doc.data(), doc.id);
         
         messages.push(message);
@@ -112,7 +112,6 @@ async function getInboxMessages(user){
 
     return messages;
 }
-
 
 
 async function getDrafts(user){
@@ -130,11 +129,10 @@ async function getDrafts(user){
     console.log("2");
     querySnapshot = await FirebaseFirestore.getDocs(q);
 
-
     console.log("3");
     var messages = [];
     querySnapshot.forEach((doc) => {
-        console.log(`THE ID is ${doc.id}====================================`);
+        // console.log(`THE ID is ${doc.id}====================================`);
         let message = Message.deserialize(doc.data(), doc.id);
         messages.push(message);
       });
