@@ -30,7 +30,7 @@ class Message{
     }
 
     setElements(elements){
-        console.log(elements)
+        // console.log(elements)
         this.elements = elements;
     }
 
@@ -38,35 +38,9 @@ class Message{
         this.state = state;
     }
 
-    constructSmilMessage(elements){
-        let smilMessage = `<seq>\n`
-
-        for (var i=0; i<elements.length; i++){
-            smilMessage += `
-                    <text val="${elements[i]['txt']}" begin="${elements[i]['begin']}"   dur="${elements[i]['dur']}">
-        `        
-        }
-        smilMessage += `</seq>\n`
-        this.smilMessage = smilMessage;
-
-                /* Construct Smil message based off of textMessage and textDuration
-                let smilMessage = `
-                <smil>
-                    <head>
-                    </head>
-                    <body>
-                        <par>
-                            <smilText dur="${this.textDuration}s">${this.textMessage}</smilText>
-                        </par>
-                    </body>
-                </smil>
-            `*/
-    }
-
     setSmilMessage(message){
         this.smilMessage = message;
     }
-
 
     setId(id){
         this.id = id;
@@ -89,7 +63,6 @@ class Message{
         date.setHours(date.getHours() - 6);
         return date.toDateString() + " " + date.toLocaleTimeString('en-US');
     }
-
 
     static deserialize(message, id){
         var deserializedMessage = new Message();
