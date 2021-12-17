@@ -29,9 +29,8 @@ window.sessionLogin = async ()=>{
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
-                    "CSRF-Token": Cookies.get("XSRF-TOKEN"),
                 },
-                body: JSON.stringify({idToken}),
+                body: JSON.stringify({idToken, "_csrf": Cookies.get("XSRF-TOKEN")}),
             });
         });
     }).then(async()=>{
