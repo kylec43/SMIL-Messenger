@@ -1,4 +1,3 @@
-var FirebaseFirestore = require('firebase/firestore/lite');
 var Message = require('../model/message.js');
 var Folders = require('../model/constants.js').firebase_folders;
 var Args = require('../model/constants.js').firebase_args;
@@ -12,7 +11,7 @@ async function uploadMessage(req, res, state_arg){
         /* Get user input */
         const recepient = req.body.recepient;
         const subject = req.body.subject;
-        const timeStamp = FirebaseFirestore.Timestamp.fromDate(new Date());
+        const timeStamp = FirebaseAdmin.firestore.Timestamp.fromDate(new Date());
         const state = state_arg;
         const elements = req.body.elem;
         const smilMessage = req.body.smil_text;
@@ -43,101 +42,92 @@ async function uploadMessage(req, res, state_arg){
         newMessage.setSmilMessage(smilMessage);
 
         /* upload newMessage to doc location*/
-        await FirebaseFirestore.addDoc(FirebaseFirestore.collection(FirebaseFirestore.getFirestore(), Folders.MESSAGE_FOLDER), newMessage.serialize());
+        await FirebaseAdmin.firestore().collection(Folders.MESSAGE_FOLDER).add(newMessage.serialize());
 
-        // console.log("END============================================");
-        return res.render(Pages.COMPOSE_PAGE, {alertMessage, user: req.user, draft: null});
+        return res.render(Pages.COMPOSE_PAGE, {alertMessage, user: req.user, draft: null, csrfToken: req.csrfToken()});
 
     } catch(e){
         console.log(`upload failed: ${e}`);
-        return res.render(Pages.COMPOSE_PAGE, {alertMessage: `${e}`, user: req.user, draft: null});
+        return res.render(Pages.COMPOSE_PAGE, {alertMessage: `${e}`, user: req.user, draft: null, csrfToken: req.csrfToken()});
     }
 }
 
 
 async function deleteMessage(id){
-    const docRef = FirebaseFirestore.doc(FirebaseFirestore.getFirestore(), 'messages', id);
-    await FirebaseFirestore.deleteDoc(docRef);
+    await FirebaseAdmin.firestore().doc(`messages/${id}`).delete();
 }
 
 
 async function getSentMessages(user){
-    const q = FirebaseFirestore.query(
-        FirebaseFirestore.collection(FirebaseFirestore.getFirestore(), "messages"), 
-        FirebaseFirestore.where(Args.COMPOSER, "==", user.email),
-        FirebaseFirestore.where("state", "==", "sent"),
-        FirebaseFirestore.orderBy("time_stamp", "desc")
-        );
+    try{
+        var querySnapshot = await FirebaseAdmin.firestore().collection("messages")
+                            .where(Args.COMPOSER, "==", user.email)
+                            .where("state", "==", "sent")
+                            .orderBy("time_stamp", "desc")
+                            .get();
 
-    querySnapshot = await FirebaseFirestore.getDocs(q);
 
-    var messages = [];
-    querySnapshot.forEach((doc) => {
-        // console.log(`THE ID is ${doc.id}====================================`);
-        let message = Message.deserialize(doc.data(), doc.id);
-        messages.push(message);
-      });
+        var messages = [];
+        querySnapshot.forEach((doc) => {
+            let message = Message.deserialize(doc.data(), doc.id);
+            messages.push(message);
+        });
 
-    return messages;
+        return messages;
+
+    } catch(e){
+        console.log(`${e}`);
+    }
+
 }
 
 
 async function getInboxMessages(user){
     try{
-    // console.log("1");
-    console.log(Args.RECEPIENT);
-    const q = FirebaseFirestore.query(
-        FirebaseFirestore.collection(FirebaseFirestore.getFirestore(), "messages"), 
-        FirebaseFirestore.where("recepient", "==", user.email),
-        FirebaseFirestore.where("state", "==", "sent"),
-        FirebaseFirestore.orderBy("time_stamp", "desc")
-        );
 
-    // console.log("2");
-    querySnapshot = await FirebaseFirestore.getDocs(q);
+        var querySnapshot = await FirebaseAdmin.firestore().collection("messages")
+                            .where("recepient", "==", user.email)
+                            .where("state", "==", "sent")
+                            .orderBy("time_stamp", "desc")
+                            .get();
 
-    // console.log("3");
-    var messages = [];
-    querySnapshot.forEach((doc) => {
-        // console.log(`THE ID is ${doc.id}====================================`);
-        let message = Message.deserialize(doc.data(), doc.id);
-        
-        messages.push(message);
-      });
+        console.log(Args.RECEPIENT);
+
+
+        var messages = [];
+        querySnapshot.forEach((doc) => {
+            let message = Message.deserialize(doc.data(), doc.id);
+            messages.push(message);
+        });
+
+        return messages;
     } catch(e){
         console.log(e);
     }
 
-    return messages;
 }
 
 
 async function getDrafts(user){
     try{
-    // console.log("1");
-    console.log(Args.RECEPIENT);
-    const q = FirebaseFirestore.query(
-        FirebaseFirestore.collection(FirebaseFirestore.getFirestore(), "messages"), 
-        FirebaseFirestore.where(Args.COMPOSER, "==", user.email),
-        FirebaseFirestore.where("state", "==", "draft"),
-        FirebaseFirestore.orderBy("time_stamp", "desc")
-        );
 
-    // console.log("2");
-    querySnapshot = await FirebaseFirestore.getDocs(q);
+        var querySnapshot = await FirebaseAdmin.firestore().collection("messages")
+                            .where(Args.COMPOSER, "==", user.email)
+                            .where("state", "==", "draft")
+                            .orderBy("time_stamp", "desc")
+                            .get();
 
-    // console.log("3");
     var messages = [];
     querySnapshot.forEach((doc) => {
-        // console.log(`THE ID is ${doc.id}====================================`);
         let message = Message.deserialize(doc.data(), doc.id);
         messages.push(message);
       });
+
+      return messages;
     } catch(e){
         console.log(e);
     }
 
-    return messages;
 }
 
 

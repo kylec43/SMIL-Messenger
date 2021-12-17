@@ -31,7 +31,7 @@ app.set('view engine', 'ejs');
 app.set('views', './view');
 
 
-//Let express handle requests
+//set function as API endpoint for express
 const functions = require("firebase-functions");
 exports.httpReq = functions.https.onRequest(app);
 
@@ -41,22 +41,38 @@ const Pages = require('./model/constants.js').pages;
 const FirebaseAuthController = require('./controller/firebase_auth_controller.js');
 const MessageManager = require('./controller/message_manager.js');
 
+
+/* Setup csurf, cookieParser */
+const cookieParser = require("cookie-parser");
+const csrf = require("csurf");
+const csrfMiddleWare = csrf({cookie: true});
+app.use(cookieParser());
+app.use(csrfMiddleWare);
+
+app.all("*", (req, res, next) => {
+    res.cookie("XSRF-TOKEN", req.csrfToken());
+    console.log("=========================CSERF===========================");
+    res.setHeader('Cache-Control', 'private');
+    next();
+});
+
+
 app.get('/', authAndRedirectInbox, (req, res) => {
     res.redirect('/login');
 });
 
 
 app.get('/login', authAndRedirectInbox, (req, res) => {
-    res.render(Pages.LOGIN_PAGE, {alertMessage: null});
+    res.render(Pages.LOGIN_PAGE, {alertMessage: null, csrfToken: req.csrfToken()});
 });
 
 
-app.post('/login', authAndRedirectInbox, async (req, res) => {
-    return await FirebaseAuthController.loginUser(req, res);
+app.post('/session_login', authAndRedirectInbox, async (req, res) => {
+    return await FirebaseAuthController.sessionLogin(req, res);
 });
 
 app.get('/forgot_password', authAndRedirectInbox, (req, res) => {
-    res.render(Pages.FORGOT_PASSWORD_PAGE, {alertMessage: null});
+    res.render(Pages.FORGOT_PASSWORD_PAGE, {alertMessage: null, csrfToken: req.csrfToken()});
 });
 
 app.post('/forgot_password', authAndRedirectInbox, async (req, res) => {
@@ -65,7 +81,7 @@ app.post('/forgot_password', authAndRedirectInbox, async (req, res) => {
 
 
 app.get('/register', authAndRedirectInbox, (req, res) => {
-    res.render(Pages.REGISTER_PAGE, {alertMessage: null});
+    res.render(Pages.REGISTER_PAGE, {alertMessage: null, csrfToken: req.csrfToken()});
 });
 
 app.post('/register', authAndRedirectInbox, (req, res) => {
@@ -74,7 +90,7 @@ app.post('/register', authAndRedirectInbox, (req, res) => {
 
 
 app.get('/compose', authAndRedirectLogin, (req, res) => {
-    res.render(Pages.COMPOSE_PAGE, {alertMessage: null, user: req.user, draft: null});
+    res.render(Pages.COMPOSE_PAGE, {alertMessage: null, user: req.user, draft: null, csrfToken: req.csrfToken()});
 });
 
 app.post('/compose-send', authAndRedirectLogin, async (req, res) => {
@@ -93,31 +109,31 @@ app.post("/edit-draft", authAndRedirectLogin, (req, res) => {
     var messageObject = JSON.parse(messageString);
     // console.log(messageObject);
     // console.log(messageObject.recepient);
-    return res.render(Pages.COMPOSE_PAGE, {alertMessage: null, user: req.user, draft: messageObject});
+    return res.render(Pages.COMPOSE_PAGE, {alertMessage: null, user: req.user, draft: messageObject, csrfToken: req.csrfToken()});
 });
 
 app.get('/drafts', authAndRedirectLogin, async (req, res) => {
     let drafts = await MessageManager.getDrafts(req.user);
-    res.render(Pages.DRAFTS_PAGE, {alertMessage: null, user: req.user, drafts});
+    res.render(Pages.DRAFTS_PAGE, {alertMessage: null, user: req.user, drafts, csrfToken: req.csrfToken()});
 });
 
 
 app.get('/inbox', authAndRedirectLogin, async (req, res) => {
     let inboxMessages = await MessageManager.getInboxMessages(req.user);
     //console.log(`Inbox messages length is ${inboxMessages.length}`);
-    res.render(Pages.INBOX_PAGE, {alertMessage: null, user: req.user, inboxMessages});
+    res.render(Pages.INBOX_PAGE, {alertMessage: null, user: req.user, inboxMessages, csrfToken: req.csrfToken()});
 });
 
 
 app.get('/sent', authAndRedirectLogin, async (req, res) => {
     let sentMessages = await MessageManager.getSentMessages(req.user);
     // console.log(`Sent messages length is ${sentMessages.length}`);
-    res.render(Pages.SENT_PAGE, {alertMessage: null, user: req.user, sentMessages});
+    res.render(Pages.SENT_PAGE, {alertMessage: null, user: req.user, sentMessages, csrfToken: req.csrfToken()});
 });
 
 
 app.get('/mediaplayer', authAndRedirectLogin, (req, res) => {
-    res.render(Pages.MEDIAPLAYER_PAGE, {alertMessage: null, user: req.user});
+    res.render(Pages.MEDIAPLAYER_PAGE, {alertMessage: null, user: req.user, csrfToken: req.csrfToken()});
 });
 
 app.get('/logout', async (req, res) => {
@@ -126,7 +142,8 @@ app.get('/logout', async (req, res) => {
 
 
 async function authAndRedirectLogin(req, res, next){
-    req.user = FirebaseAuthController.getCurrentUser();
+    const sessionCookie = req.cookies.__session || "";
+    req.user = await FirebaseAuthController.verifySession(sessionCookie);
     
     if(req.user){
         req.token = await FirebaseAuthController.generateToken(req.user);
@@ -138,7 +155,8 @@ async function authAndRedirectLogin(req, res, next){
 
 
 async function authAndRedirectInbox(req, res, next){
-    req.user = FirebaseAuthController.getCurrentUser();
+    const sessionCookie = req.cookies.__session || "";
+    req.user = await FirebaseAuthController.verifySession(sessionCookie);
     
     if(req.user){
         res.redirect('/inbox');

@@ -29,6 +29,7 @@
                 </div>
                 <hr style="margin: 0px;">
                 <form action="/edit-draft" id="drafts_form" method="post">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <% for(let i = 0; i < drafts.length; i++) { %>
                         <div class="smil-list-row-container">
                             <a class="smil-list-button" href="#" onclick="onSubmit(<%= i %>)" style="text-decoration: none;">

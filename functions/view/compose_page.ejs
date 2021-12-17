@@ -11,6 +11,7 @@
         <%- include('partials/navbar.ejs', {page: 'compose', user}) %>
         <div class="sidebar-outside-container">
             <form method="post" id="compose_form">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div class="smil-compose-form">
                     <div class="form-group">
                         <label for="recepient">Recepient:</label>
